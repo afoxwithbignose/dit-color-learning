@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="剧组 DIT（数字影像工程师）从拷卡、备份、调色监看到 Dailies 交付的全流程中文学习手册。">
+  <title>片场 DIT · 从拷卡开始的全流程手册</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div class="reading-progress" aria-hidden="true"><span id="readingBar"></span></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark">D<span>i</span>T</span>
+      <span class="brand-copy">Digital Imaging<br><b>片场工作手册</b></span>
+    </a>
+    <nav class="top-nav" aria-label="主导航">
+      <a href="#ingest">拷卡</a>
+      <a href="#pipeline">影像</a>
+      <a href="#onset">现场</a>
+      <a href="#qc">质检</a>
+      <a href="#learn">学习</a>
+    </nav>
+    <button class="icon-button" id="printButton" type="button" aria-label="打印或导出为 PDF" title="打印 / 导出 PDF">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg>
+    </button>
+    <button class="menu-button" id="menuButton" type="button" aria-label="打开目录" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <span class="eyebrow">CREW MANUAL / 片场手册</span>
+    <a href="#role">00 / DIT 是谁</a>
+    <a href="#ingest">01 / 拷卡与校验</a>
+    <a href="#pipeline">02 / 影像与色彩</a>
+    <a href="#onset">03 / 现场工作流</a>
+    <a href="#qc">04 / 质检与交付</a>
+    <a href="#debug">05 / 故障排查</a>
+    <a href="#learn">06 / 学习路线</a>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <div class="eyebrow reveal">DIGITAL IMAGING TECHNICIAN · 剧组数字影像工程师</div>
+        <h1 class="reveal">从一张卡开始，<br><em>守住整部片子的影像。</em></h1>
+        <p class="hero-lede">一份给片场 DIT 的完整作战手册。从接卡、双备份和哈希校验开始，连接相机监看、曝光、色彩管理、代理与同步、Dailies 交付、素材归档和故障处理。</p>
+        <div class="hero-actions reveal">
+          <a class="button button-primary" href="#ingest">从拷卡开始 <span>↓</span></a>
+          <a class="button button-ghost" href="#sop">查看全流程 SOP</a>
+        </div>
+        <div class="hero-meta reveal">
+          <div><strong>05</strong><span>主流程阶段</span></div>
+          <div><strong>10</strong><span>拷卡放行项</span></div>
+          <div><strong>3-2-1</strong><span>素材安全原则</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="visual-topline">
+          <span>ON-SET MONITOR / SHOW LUT</span>
+          <span class="live-dot">REC</span>
+        </div>
+        <canvas id="heroCanvas" width="640" height="560" aria-label="相机 Log 画面经过 Show LUT 后的监看差异示意"></canvas>
+        <div class="visual-overlay">
+          <span id="heroState">LOG / 低对比监看</span>
+          <span id="heroMetric">S-LOG3 · SGAMUT3.CINE</span>
+        </div>
+        <div class="hero-control">
+          <div>
+            <label for="heroSlider">拖动查看 Log 与 Show LUT</label>
+            <span id="heroLutState">SHOW LUT · 42%</span>
+          </div>
+          <input id="heroSlider" type="range" min="0" max="100" value="42" aria-label="Log 与 Show LUT 对比">
+        </div>
+      </div>
+
+      <div class="hero-index" aria-hidden="true">DATA / IMAGE<br>COLOR / HANDOFF</div>
+    </section>
+
+    <div class="page-shell">
+      <aside class="side-rail" aria-label="章节目录">
+        <div class="rail-sticky">
+          <p class="rail-label">CREW INDEX</p>
+          <nav id="railNav">
+            <a href="#role"><span>00</span>DIT 是谁</a>
+            <a href="#ingest"><span>01</span>拷卡与校验</a>
+            <a href="#pipeline"><span>02</span>影像与色彩</a>
+            <a href="#onset"><span>03</span>现场工作流</a>
+            <a href="#qc"><span>04</span>质检与交付</a>
+            <a href="#delivery"><span>05</span>归档与职责</a>
+            <a href="#debug"><span>06</span>故障排查</a>
+            <a href="#learn"><span>07</span>学习地图</a>
+          </nav>
+          <div class="rail-note">
+            <span class="status-light"></span>
+            <p>先保住素材，<br>再谈画面好看。</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="chapter chapter-intro" id="role">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">00</span><span class="eyebrow">ROLE / 明确 DIT 的职责边界</span></div>
+            <span class="time-chip">PREP · 先对齐再上机</span>
+          </div>
+          <div class="intro-grid">
+            <div class="intro-heading reveal">
+              <h2>DIT 不是“高级拷卡员”，<br>也不是片场调色师。</h2>
+            </div>
+            <div class="intro-copy reveal">
+              <p>DIT 是摄影、数据、色彩和后期之间的人。你既要让素材安全、完整、可追溯，也要用正确的技术转换与监看环境，让导演、摄影指导看到可信的画面，并把现场创作意图准确交给后期。</p>
+              <blockquote>一句可验收的职责：在不改变素材原始信息的前提下，保证每一次拍摄都能被正确监看、可靠备份、快速检索，并在当天准确送达剪辑与调色。</blockquote>
+            </div>
+          </div>
+
+          <div class="decision-grid">
+            <article class="decision-card reveal">
+              <span class="card-index">01 / DATA</span>
+              <h3>数据安全负责人</h3>
+              <p>接卡、复制、校验、命名、备份、登记与介质交接。任何“应该拷完了吧”都要变成文件数、字节数、哈希和可播放证据。</p>
+              <div class="tag-row"><span>Offload</span><span>Checksum</span><span>Backup</span></div>
+            </article>
+            <article class="decision-card reveal">
+              <span class="card-index">02 / IMAGE</span>
+              <h3>影像质量守门人</h3>
+              <p>用波形图、伪色、监看 LUT 和环境光判断曝光与色彩状态，发现频闪、坏点、镜头问题并及时反馈摄影组。</p>
+              <div class="tag-row"><span>Exposure</span><span>Monitor</span><span>QC</span></div>
+            </article>
+            <article class="decision-card reveal">
+              <span class="card-index">03 / COLOR</span>
+              <h3>色彩管线的桥梁</h3>
+              <p>区分技术转换与创作 LUT，维护 Show LUT、CDL、节点和监看环境。DIT 建立“可重复的看片方式”，不是最终定调。</p>
+              <div class="tag-row"><span>ACES</span><span>CDL</span><span>Show LUT</span></div>
+            </article>
+            <article class="decision-card reveal">
+              <span class="card-index">04 / HANDOFF</span>
+              <h3>后期交接的执行人</h3>
+              <p>制作代理、同步声音、嵌入时间码和元数据、输出 Dailies 与报告，让剪辑、场记、制片和后期拿到同一份真相。</p>
+              <div class="tag-row"><span>Proxy</span><span>Sync</span><span>Dailies</span></div>
+            </article>
+          </div>
+
+          <div class="definition-strip reveal">
+            <span class="eyebrow">DIT ≠ 其他岗位</span>
+            <p><strong>Loader</strong> 管卡和装载流程；<strong>Data Wrangler</strong> 主要管数据备份；<strong>DIT</strong> 进一步负责技术监看、色彩管线与现场影像流程；<strong>Dailies Operator</strong> 更偏每日样片制作；<strong>Colorist</strong> 负责最终创作调色。小剧组会合并岗位，但责任必须写清楚。</p>
+          </div>
+
+          <h3 class="section-subtitle reveal">进组前必须确认的四件事</h3>
+          <div class="refinery-grid">
+            <article class="refinery-card reveal"><span class="num">01</span><h4>相机与记录格式</h4><p>机身、传感器模式、RAW/Log 曲线、分辨率、帧率、编码、色彩空间、双卡策略和镜头信息。每个组合都要做实际测试。</p><code>camera · codec · gamut</code></article>
+            <article class="refinery-card reveal"><span class="num">02</span><h4>监看与色彩管线</h4><p>现场看什么 LUT，最终用什么色彩空间，谁提供 Show LUT / CDL，监视器是否校准，后期需要哪种参考。</p><code>IDT · LUT · ODT</code></article>
+            <article class="refinery-card reveal"><span class="num">03</span><h4>交付规格</h4><p>代理编码、分辨率、音频通道、同步方式、Dailies 平台、文件命名、报告模板和每天几点前必须送达。</p><code>proxy · sync · dailies</code></article>
+            <article class="refinery-card reveal"><span class="num">04</span><h4>备份与介质</h4><p>主备存储在哪，是否有异地副本，谁来取盘，卡何时能清，容量够几天，网络能不能支撑当日交付。</p><code>3-2-1 · transfer · archive</code></article>
+          </div>
+        </section>
+
+        <section class="chapter" id="sop">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">SOP</span><span class="eyebrow">MASTER ROUTE / 每日工作总览</span></div>
+            <button class="reset-button" id="resetSop" type="button">重置清单</button>
+          </div>
+          <div class="chapter-title-row reveal">
+            <h2>五段式现场线路</h2>
+            <p>每一段都有明确的“放行证据”。上一段没有闭环，不要靠记忆进入下一段。</p>
+          </div>
+          <div class="route-map reveal" id="routeMap">
+            <button class="route-node active" data-target="ingest"><span>01</span><b>接卡</b><small>读取 + 登记</small></button>
+            <div class="route-line"></div>
+            <button class="route-node" data-target="dataset"><span>02</span><b>备份</b><small>哈希 + 播放</small></button>
+            <div class="route-line"></div>
+            <button class="route-node" data-target="onset"><span>03</span><b>现场</b><small>代理 + 同步</small></button>
+            <div class="route-line"></div>
+            <button class="route-node" data-target="qc"><span>04</span><b>质检</b><small>声音 + 色彩</small></button>
+            <div class="route-line"></div>
+            <button class="route-node" data-target="delivery"><span>05</span><b>交付</b><small>报告 + 归档</small></button>
+          </div>
+          <div class="sop-meter reveal">
+            <div><span id="sopCount">0 / 10</span><small>拷卡放行项</small></div>
+            <div class="meter-track"><span id="sopMeter"></span></div>
+            <p id="sopMessage">从第一项开始，稳比快重要。</p>
+          </div>
+          <div class="warning-inline wide reveal"><b>全流程底线：</b>原始卡在至少两份独立备份通过哈希与播放抽检之前，不格式化、不重命名源文件、不在源卡上转码或整理目录。</div>
+        </section>
+
+        <section class="chapter" id="ingest">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">01</span><span class="eyebrow">INGEST / 从接卡到可交付素材</span></div>
+            <span class="time-chip">CRITICAL · 不可重拍</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>你接过的不是文件，<br>是剧组无法重来的表演。</h2>
+            <div>
+              <p class="lead">拷卡不是把文件拖进硬盘。正确顺序是：确认来源、只读接入、保留原始结构、复制工作副本、建立独立备份、校验哈希、抽检播放、登记报告，最后才按流程清卡。</p>
+              <p class="warning-inline"><b>不要用“复制完成”代替“已验证”。</b>文件数与容量一致只是最低检查，仍然需要内容哈希和实际解码。</p>
+            </div>
+          </div>
+
+          <div class="ingest-diagram reveal" aria-label="从原卡到双备份和交付的流程">
+            <div class="media-node source"><span>SOURCE</span><strong>摄影机原卡</strong><small>只读接入 · 保留原结构</small></div>
+            <div class="flow-arrow"><i></i><span>Copy A</span></div>
+            <div class="media-node"><span>WORKING</span><strong>主工作副本</strong><small>代理 / 同步 / 质检</small></div>
+            <div class="flow-split"><div></div><div class="flow-arrow"><i></i><span>Copy B</span></div><div></div></div>
+            <div class="media-node backup"><span>INDEPENDENT</span><strong>独立备份</strong><small>不同设备 / 不同故障域</small></div>
+            <div class="verify-stamp"><span>VERIFIED</span><strong>HASH + PLAYBACK</strong><small>文件数 · 字节数</small></div>
+          </div>
+
+          <h3 class="section-subtitle reveal">现场 10 步拷卡 SOP</h3>
+          <div class="steps-list" data-phase="ingest">
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-1" data-sop><label for="sop-1"><span></span></label></div>
+              <div class="step-number">01</div>
+              <div class="step-content"><h4>停录、确认、登记来源</h4><p>等摄影机停止写入并安全断电或弹出介质。记录拍摄日、摄影机机号、卡号、卷号、场镜次、帧率、编码、卡容量和交卡人。卡与电子台账使用同一个唯一编号。</p></div>
+              <span class="step-owner">DIT / Loader</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-2" data-sop><label for="sop-2"><span></span></label></div>
+              <div class="step-number">02</div>
+              <div class="step-content"><h4>只读接入，检查源卡健康</h4><p>优先使用可靠读卡器和稳定供电，避免 HUB 串联。核对源卡卷标、文件夹数量与文件数；出现 I/O 报错、异响或容量异常时立即停止，保留原卡，不执行“修复并写回”。</p></div>
+              <span class="step-owner">DIT / Loader</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-3" data-sop><label for="sop-3"><span></span></label></div>
+              <div class="step-number">03</div>
+              <div class="step-content"><h4>按不可变目录契约复制</h4><p>推荐：<code>PROJECT/2026-10-26/CAM_A/ROLL_001/CARD_001/</code>。保留相机的原始目录和文件名；代理、报告、LUT、声音和 Dailies 各自进入独立目录，通过清单关联。</p></div>
+              <span class="step-owner">DIT</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-4" data-sop><label for="sop-4"><span></span></label></div>
+              <div class="step-number">04</div>
+              <div class="step-content"><h4>建立主工作副本与独立备份</h4><p>A 副本供现场处理，B 副本进入不同物理介质或异地存储。不要在主副本上直接改名原片；不要对源卡使用镜像删除式命令。</p></div>
+              <span class="step-owner">DIT</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-5" data-sop><label for="sop-5"><span></span></label></div>
+              <div class="step-number">05</div>
+              <div class="step-content">
+                <h4>哈希校验源文件与两份副本</h4>
+                <p>对源、A、B 分别计算内容哈希并比对；同时核对文件数、总字节、目录结构。大批量项目可使用专业 Offload 软件和 xxHash 提高速度，但必须保存校验报告。</p>
+                <pre><code data-copy># Windows / PowerShell：按相对路径生成一目录的哈希清单
+function Get-TreeHash([string]$Root) {
+  $Base = (Resolve-Path $Root).Path.TrimEnd('\')
+  Get-ChildItem $Root -File -Recurse | ForEach-Object {
+    [pscustomobject]@{
+      RelativePath = $_.FullName.Substring($Base.Length).TrimStart('\')
+      Hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+    }
+  }
+}
+Get-TreeHash "D:\CARD\DCIM" | Sort-Object RelativePath |
+  Export-Csv ".\source_hashes.csv" -NoTypeInformation -Encoding UTF8
+
+# 对 A、B 副本分别生成清单，再按相对路径和哈希比对
+Compare-Object (Import-Csv ".\source_hashes.csv") `
+  (Import-Csv ".\copy_a_hashes.csv") -Property RelativePath,Hash</code><button class="copy-button" type="button">复制</button></pre>
+              </div>
+              <span class="step-owner">DIT</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-6" data-sop><label for="sop-6"><span></span></label></div>
+              <div class="step-number">06</div>
+              <div class="step-content"><h4>播放抽检，确认素材真的能解码</h4><p>不能只看缩略图。每个卷至少检查首、中、尾镜头，播放到硬盘尾端，确认无花帧、丢帧、坏块、黑帧、异常曝光和音频缺失。记录异常片段的时间码。</p></div>
+              <span class="step-owner">DIT</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-7" data-sop><label for="sop-7"><span></span></label></div>
+              <div class="step-number">07</div>
+              <div class="step-content">
+                <h4>抓取技术元数据</h4>
+                <p>记录分辨率、帧率、时长、编码、色彩空间、Log 曲线、ISO/EI、白平衡、镜头、时间码起止。专业软件通常自动完成，但关键字段必须人工抽核。</p>
+                <pre><code data-copy>ffprobe -v error -show_entries format=duration,size ^
+  -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt ^
+  -of json "D:\CARDS\CARD_001\CAM_A\CLIP_001.MXF"</code><button class="copy-button" type="button">复制</button></pre>
+              </div>
+              <span class="step-owner">DIT</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-8" data-sop><label for="sop-8"><span></span></label></div>
+              <div class="step-number">08</div>
+              <div class="step-content">
+                <h4>生成代理与现场参考</h4>
+                <p>代理必须保留原始时间码、帧率和足够画质，便于声画同步与剪辑。代理、Dailies 和 LUT 命名要与原片可一一对应，不能覆盖原始素材。</p>
+                <pre><code data-copy>ffmpeg -i input.mxf -vf "scale=1920:-2" ^
+  -map 0:v:0 -map 0:a? -c:v prores_ks -profile:v 2 ^
+  -c:a pcm_s24le -timecode "01:00:00:00" proxy.mov</code><button class="copy-button" type="button">复制</button></pre>
+              </div>
+              <span class="step-owner">DIT / Dailies</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-9" data-sop><label for="sop-9"><span></span></label></div>
+              <div class="step-number">09</div>
+              <div class="step-content"><h4>更新报告并交接</h4><p>在 Offload 报告中记录源、目的地、哈希结果、异常、操作员与时间。把主副本、备份位置、代理、声音、CDL/LUT 和异常清单交给指定负责人，并取得回执。</p></div>
+              <span class="step-owner">DIT / 制片</span>
+            </article>
+            <article class="step-item reveal">
+              <div class="step-check"><input type="checkbox" id="sop-10" data-sop><label for="sop-10"><span></span></label></div>
+              <div class="step-number">10</div>
+              <div class="step-content"><h4>签字确认后才允许清卡</h4><p>至少两份独立备份通过完整性校验与播放抽检，报告归档，并获得制片/数据负责人确认。清卡遵循剧组介质管理制度，任何一项缺失都继续保留原卡。</p></div>
+              <span class="step-owner">制片 + DIT</span>
+            </article>
+          </div>
+
+          <div class="callout callout-amber reveal">
+            <span class="callout-icon">!</span>
+            <div><strong>“两个副本”必须是独立故障域</strong><p>同一块盘里的两个文件夹、同一台 NAS 上的两个目录、同一台电脑里的 SSD 与 HDD，都可能被同一次误操作或主机故障一起带走。备份要跨设备、跨介质，关键项目再加异地副本。</p></div>
+          </div>
+
+          <div class="checkpoint-contract report-sheet reveal">
+            <span class="eyebrow">OFFLOAD REPORT / COPY CARD 回执</span>
+            <h3>报告不是形式：它要在事故之后回答“证据在哪”。</h3>
+            <div class="contract-chips">
+              <span>项目 / 日期 / 拍摄日</span><span>相机机号 / 卡号 / 卷号</span><span>源路径 / 源文件数 / 总字节</span><span>A 路径 + 哈希结果</span><span>B 路径 + 哈希结果</span><span>播放抽检片段</span><span>异常 TC / 描述</span><span>代理路径 / LUT 版本</span><span>操作员 / 开始结束时间</span><span>交接对象 / 签收时间</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="chapter" id="dataset">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">TRANSFER</span><span class="eyebrow">BACKUP LAB / 拷贝速度与容量</span></div>
+            <span class="time-chip">INTERACTIVE · 先算再开机</span>
+          </div>
+          <div class="chapter-title-row reveal">
+            <h2>容量决定盘，通道速度决定收工时间。</h2>
+            <p>估算只用于排期，不计文件系统开销、读卡器降速、校验和报告生成。正式项目必须用实际素材做传输测试。</p>
+          </div>
+          <div class="token-lab reveal">
+            <div class="token-controls">
+              <label for="cardSizeRange">单卡容量 <output id="cardSizeOut">512 GB</output></label>
+              <input id="cardSizeRange" type="range" min="128" max="2048" step="128" value="512">
+              <label for="cardCountRange">当日卡数 <output id="cardCountOut">12 张</output></label>
+              <input id="cardCountRange" type="range" min="1" max="40" step="1" value="12">
+              <label for="copySpeedRange">持续写入速度 <output id="copySpeedOut">900 MB/s</output></label>
+              <input id="copySpeedRange" type="range" min="100" max="3000" step="100" value="900">
+              <label for="copyCountRange">目标副本 <output id="copyCountOut">2 份</output></label>
+              <input id="copyCountRange" type="range" min="1" max="3" step="1" value="2">
+              <div class="mini-controls">
+                <button type="button" class="preset active" data-size="512" data-count="12" data-speed="900" data-copies="2">常规日</button>
+                <button type="button" class="preset" data-size="1024" data-count="8" data-speed="1200" data-copies="2">高码率</button>
+                <button type="button" class="preset" data-size="256" data-count="24" data-speed="500" data-copies="3">三备份</button>
+              </div>
+            </div>
+            <div class="token-output">
+              <div class="token-grid-wrap">
+                <canvas id="dataCanvas" width="360" height="360" aria-label="素材卡与备份容量可视化"></canvas>
+                <div class="latent-label">MEDIA VOLUME <span id="mediaVolume">6.0 TB</span></div>
+              </div>
+              <div class="token-numbers">
+                <div class="big-number"><strong id="copyHours">3.8 h</strong><span>纯传输理论时间</span></div>
+                <div class="stat-pair">
+                  <div><strong id="writtenData">12.0 TB</strong><span>累计写入量</span></div>
+                  <div><strong id="workingStorage">6.0 TB</strong><span>主工作盘占用</span></div>
+                </div>
+                <p>* 以 1 GB = 1024 MB、持续速度恒定估算。实际预留 30%–50% 余量，并把校验、代理、同步、Dailies 与人工质检工时分开计算。</p>
+              </div>
+            </div>
+          </div>
+          <div class="warning-inline wide reveal"><b>RAID 不是备份，卡也不是工作盘。</b>RAID 只能降低部分硬件故障风险，不能防误删除、勒索软件、控制器损坏或雷击。工作盘、备份盘与原卡分别管理。</div>
+        </section>
+
+        <section class="chapter chapter-dark" id="pipeline">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">02</span><span class="eyebrow">IMAGE PIPELINE / 曝光、色彩与监看</span></div>
+            <span class="time-chip">ON SET · 让画面“看得对”</span>
+          </div>
+          <div class="dark-title reveal">
+            <h2>记录的是数据，<br>监看的是解释。</h2>
+            <p>相机 Log 或 RAW 保留高动态范围，却通常显得灰、平、低饱和。DIT 用受控的技术转换与 Show LUT 把素材映射到当前监视器，让现场判断接近成片，同时不把监看效果误当作原始素材。</p>
+          </div>
+
+          <div class="arch-flow reveal">
+            <div class="arch-node input"><span>01</span><strong>Camera</strong><small>RAW / Log 源素材</small></div>
+            <div class="arch-connector">IDT</div>
+            <div class="arch-node"><span>02</span><strong>Scene</strong><small>线性或工作色彩空间</small></div>
+            <div class="arch-connector">CDL / LUT</div>
+            <div class="arch-node"><span>03</span><strong>Look</strong><small>现场技术监看转换</small></div>
+            <div class="arch-connector">ODT</div>
+            <div class="arch-node output"><span>04</span><strong>Display</strong><small>校准后的监看设备</small></div>
+          </div>
+
+          <div class="block-anatomy reveal">
+            <div class="anatomy-title">
+              <div><span class="eyebrow">ACES MENTAL MODEL</span><h3>一条可靠的 ACES 监看链</h3></div>
+              <span class="diagram-hint">简化为监看视角</span>
+            </div>
+            <div class="aces-diagram">
+              <div class="aces-step"><span>INPUT</span><b>Camera IDT</b><p>把具体相机的 Log/RAW 转换到 ACES 场景参考空间。</p></div>
+              <div class="aces-arrow">→</div>
+              <div class="aces-step"><span>WORKING</span><b>ACEScct</b><p>更便于调整的工作曲线；CDL、节点和 Show LUT 的顺序要固定。</p></div>
+              <div class="aces-arrow">→</div>
+              <div class="aces-step"><span>CREATIVE</span><b>LMT / Look</b><p>摄影指导的创作方向。与纯技术转换分开命名和保存。</p></div>
+              <div class="aces-arrow">→</div>
+              <div class="aces-step"><span>OUTPUT</span><b>ODT</b><p>目标显示空间，如 Rec.709；必须匹配监视器与观看环境。</p></div>
+            </div>
+            <p class="block-caption">若项目不使用 ACES，同样要明确 Camera → Working → Display 的每一步。不要套一个来源不明的“电影感 LUT”就宣称色彩管理完成。</p>
+          </div>
+
+          <div class="math-cards">
+            <article class="math-card reveal"><span>01</span><h4>曝光看数据，不只看亮度</h4><p>结合波形图、伪色、斑马纹、高光保护策略与相机原生基准判断。RAW 的 EI 是监看/元数据策略，不等同于简单提高传感器物理 ISO。</p></article>
+            <article class="math-card reveal"><span>02</span><h4>LUT 分职责</h4><p>技术转换 LUT 解决 Log 到显示空间的映射；Show LUT 表达现场创作方向；风格 LUT 可能带有强烈的对比与偏色。文件名和版本必须可追溯。</p></article>
+            <article class="math-card reveal"><span>03</span><h4>监视器是链条的一部分</h4><p>同一 LUT 在不同亮度、色域、Gamma 和遮光条件的屏幕上会不一样。现场监视器要校准，环境漏光与背景墙颜色也会影响判断。</p></article>
+          </div>
+
+          <div class="image-notes reveal">
+            <div><span class="eyebrow">EXPOSURE NOTES</span><h3>现场常见曝光抓手</h3></div>
+            <ul>
+              <li><b>波形图：</b>看亮度分布与高光是否触顶，不把监视器亮度当曝光表。</li>
+              <li><b>伪色：</b>快速定位肤色、中灰和高光；不同相机/监看工具阈值可能不同。</li>
+              <li><b>斑马纹：</b>适合检查可控高光区，但不能代替全画面波形。</li>
+              <li><b>EI：</b>记录每次变化，避免同一场镜头因无记录改变可调空间。</li>
+              <li><b>窗格与实用光：</b>高光可能先于人脸触顶，保护策略要服从后期与创作意图。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="chapter" id="onset">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">03</span><span class="eyebrow">ON SET / 现场数据与交付链</span></div>
+            <span class="time-chip">DAILY LOOP · 场场闭环</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>现场每一个决定，<br>都要让后期能够复现。</h2>
+            <div><p class="lead">监看 LUT 好看不代表交接完整。DIT 还要保证代理、声音、时间码、元数据、CDL、升降格信息和异常记录一起到达后期，且每份文件都能追溯到原始片段。</p></div>
+          </div>
+
+          <div class="onsite-board reveal">
+            <div class="board-col source-col">
+              <span class="eyebrow">SOURCE</span>
+              <h3>相机与声音</h3>
+              <div class="board-item"><b>Original Camera</b><small>RAW / Log · 原始时间码</small></div>
+              <div class="board-item"><b>Sound Recorder</b><small>多声道 · 独立 TC</small></div>
+              <div class="board-connector"></div>
+              <div class="board-item"><b>Camera Report</b><small>场镜次 · 帧率 · 备注</small></div>
+            </div>
+            <div class="board-arrow">→</div>
+            <div class="board-col dit-col">
+              <span class="eyebrow">DIT CORE</span>
+              <h3>备份、转换、质检</h3>
+              <div class="board-stack">
+                <span>Checksum</span><span>Proxy</span><span>Sync</span><span>QC</span>
+              </div>
+              <p>主备份 · 独立备份<br>代理 · 音频 · 元数据</p>
+            </div>
+            <div class="board-arrow">→</div>
+            <div class="board-col output-col">
+              <span class="eyebrow">HANDOFF</span>
+              <h3>后期与创作</h3>
+              <div class="board-item"><b>Editorial</b><small>Proxy · AAF/XML · Sync</small></div>
+              <div class="board-item"><b>Dailies</b><small>Show LUT · Burn-in</small></div>
+              <div class="board-item"><b>Color</b><small>CDL · LUT · Report</small></div>
+            </div>
+          </div>
+
+          <div class="process-tabs reveal">
+            <div class="tab-controls" role="tablist" aria-label="现场交付类型">
+              <button type="button" role="tab" aria-selected="true" data-tab="proxy">代理与同步</button>
+              <button type="button" role="tab" aria-selected="false" data-tab="dailies">Dailies 交付</button>
+            </div>
+            <div class="tab-panel active" data-panel="proxy">
+              <div class="tab-copy">
+                <span class="card-index">EDITORIAL LINK</span>
+                <h3>代理是剪辑的替身，不是新原片</h3>
+                <p>代理必须与原片有可靠的映射关系。优先保留原始时间码、帧率和元数据；转码前确认项目帧率、宽高比、色彩空间与音频映射。</p>
+                <ul>
+                  <li><b>命名：</b>与原片同 stem，使用独立目录与清晰后缀</li>
+                  <li><b>帧率：</b>不要在代理阶段偷偷改成项目帧率</li>
+                  <li><b>同步：</b>时间码、Jam Sync 或前后拍板；记录同步方式</li>
+                  <li><b>验证：</b>对比起止帧、时长、TC、声道与播放</li>
+                </ul>
+              </div>
+              <div class="timeline-sheet" aria-label="代理与声音同步示意">
+                <div class="timeline-ruler"><span>01:00:00:00</span><span>+4s</span><span>+8s</span><span>+12s</span></div>
+                <div class="clip-track"><i style="left:2%;width:28%"></i><i style="left:33%;width:30%"></i><i style="left:66%;width:30%"></i></div>
+                <div class="clip-labels"><span>CAM A · TC</span><span>CAM A · SLATE</span><span>CAM A · SYNC</span></div>
+                <div class="window-chips"><span>Audio 1-2</span><span>Audio 3-4</span><span>Audio 5-8</span></div>
+              </div>
+            </div>
+            <div class="tab-panel" data-panel="dailies">
+              <div class="tab-copy">
+                <span class="card-index">SCREENING COPY</span>
+                <h3>每天都交一份“同一版本”</h3>
+                <p>Dailies 用统一的 Show LUT、统一的 burn-in 字段和统一的命名输出。谁来看片，都应当知道画面对应哪个相机、卷号、镜头、帧率与 LUT 版本。</p>
+                <ul>
+                  <li><b>Burn-in：</b>场镜次、机位、帧率、LUT、日期</li>
+                  <li><b>声音：</b>已同步的混合轨或参考轨，按平台规格</li>
+                  <li><b>色彩：</b>技术转换在前，Show LUT 在后</li>
+                  <li><b>清单：</b>交付平台、上传时间、复核人</li>
+                </ul>
+              </div>
+              <div class="dailies-preview" aria-label="Dailies 烧录信息示意">
+                <div class="dailies-frame">
+                  <div class="safe-area"></div>
+                  <div class="burn top-left">CAM A · CARD 003</div>
+                  <div class="burn top-right">24 FPS · 4K</div>
+                  <div class="burn bottom-left">SC 12 / TK 04</div>
+                  <div class="burn bottom-right">SHOW LUT v03</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="section-subtitle reveal">现场交接的六个“一起”</h3>
+          <div class="runbook">
+            <article class="runbook-card reveal"><div class="runbook-head"><span>01</span><h4>原片与代理一起</h4><span class="runbook-time">同一映射</span></div><p>代理与原片使用可追溯命名，不得让剪辑师靠猜文件名找原片。</p><code>ORIGINAL ↔ PROXY</code></article>
+            <article class="runbook-card reveal"><div class="runbook-head"><span>02</span><h4>画面与声音一起</h4><span class="runbook-time">同一 TC</span></div><p>同步参考、声道映射、采样率和偏移量写入交接单。</p><code>VIDEO + AUDIO</code></article>
+            <article class="runbook-card reveal"><div class="runbook-head"><span>03</span><h4>LUT 与版本一起</h4><span class="runbook-time">同一目录</span></div><p>提供 LUT 文件、应用分辨率/色彩空间、版本号与预览图。</p><code>.cube + README</code></article>
+            <article class="runbook-card reveal"><div class="runbook-head"><span>04</span><h4>CDL 与镜头一起</h4><span class="runbook-time">同一轨道</span></div><p>每个 clip 的 CDL 记录要与源文件名、卷号、场镜次分别对应。</p><code>ASC CDL / .cdl</code></article>
+            <article class="runbook-card reveal"><div class="runbook-head"><span>05</span><h4>报告与素材一起</h4><span class="runbook-time">同一项目</span></div><p>Offload、QC、异常、备份位置和交接回执同日报归档。</p><code>CSV / PDF / JSON</code></article>
+            <article class="runbook-card reveal"><div class="runbook-head"><span>06</span><h4>异常与负责人一起</h4><span class="runbook-time">立即上报</span></div><p>坏帧、失焦、音轨缺失、色彩异常不能只在聊天里口头提一句，要留下时间码与处理状态。</p><code>ISSUE → OWNER → CLOSED</code></article>
+          </div>
+
+          <div class="caption-lab reveal">
+            <div class="caption-head"><div><span class="eyebrow">FILE NAMING / 命名校样</span><h3>名字要让机器和人都能读懂</h3></div><span class="qa-pill">可追溯</span></div>
+            <div class="caption-compare">
+              <div class="bad-caption"><span>BAD</span><p>“最终版_真的最终_调色好.mov”</p><small>没有项目、日期、场镜次、相机、版本与操作员。</small></div>
+              <div class="good-caption"><span>GOOD</span><p>“NIGHT_TIGER_20261026_CAMA_R012_SCR0032_TK05_v03.mov”</p><small>项目、日期、机位、卷、场镜次、版本都可定位。</small></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="chapter" id="qc">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">04</span><span class="eyebrow">QC / 质检与 Dailies 出片</span></div>
+            <span class="time-chip">SIGN-OFF · 有证据才算完成</span>
+          </div>
+          <div class="sampling-layout">
+            <div class="sampling-copy reveal">
+              <h2>每条交付，<br>都要过同一张检查表。</h2>
+              <p class="lead">QC 不是把片子从头看到尾一次。它是按固定顺序检查容器、画面、声音、同步、元数据和命名，发现异常立即定位到时间码并记录处理结果。</p>
+              <div class="sampling-sequence">
+                <div><span>01</span><b>源文件</b><p>哈希、文件数、字节数、可解码性。</p></div>
+                <div><span>02</span><b>画面</b><p>黑帧、坏帧、裁切、帧率、LUT 与安全框。</p></div>
+                <div><span>03</span><b>声音</b><p>声道、采样率、同步、爆音、缺失。</p></div>
+                <div><span>04</span><b>交接</b><p>命名、报告、目录结构、取件回执。</p></div>
+              </div>
+            </div>
+            <div class="sampling-console qc-console reveal">
+              <div class="console-head"><span>DAILY QC SHEET</span><i class="live-dot">PENDING</i></div>
+              <div class="qc-preview">
+                <canvas id="qcCanvas" width="480" height="300" aria-label="Dailies 质检预览画面"></canvas>
+                <div class="qc-overlay"><span>SC 12 / TK 04 / A</span><span>SHOW LUT v03</span></div>
+              </div>
+              <div class="qc-checks">
+                <button type="button" class="qc-check" data-qc><i>01</i><span>文件哈希与容量一致</span><b>PASS</b></button>
+                <button type="button" class="qc-check" data-qc><i>02</i><span>首尾帧与整段可播放</span><b>PASS</b></button>
+                <button type="button" class="qc-check" data-qc><i>03</i><span>时间码、帧率与时长正确</span><b>PASS</b></button>
+                <button type="button" class="qc-check" data-qc><i>04</i><span>声音声道与本同步</span><b>PASS</b></button>
+                <button type="button" class="qc-check" data-qc><i>05</i><span>Show LUT 与烧录信息正确</span><b>PASS</b></button>
+                <button type="button" class="qc-check" data-qc><i>06</i><span>报告和交接回执已归档</span><b>PASS</b></button>
+              </div>
+              <div class="qc-total"><span id="qcCount">0 / 6</span><strong id="qcVerdict">等待质检</strong></div>
+            </div>
+          </div>
+
+          <h3 class="section-subtitle reveal">Dailies 放行标准</h3>
+          <div class="eval-grid">
+            <article class="eval-card reveal"><span>A</span><h4>源完整</h4><p>哈希、容量与目录结构均通过；原始卡仍处于可追溯状态。</p></article>
+            <article class="eval-card reveal"><span>B</span><h4>画面正确</h4><p>无坏帧与丢帧，裁切/宽高比正确，Show LUT 与安全框符合规格。</p></article>
+            <article class="eval-card reveal"><span>C</span><h4>声画同步</h4><p>声道映射、采样率与时间偏移正确；同步参考和异常都有记录。</p></article>
+            <article class="eval-card reveal"><span>D</span><h4>信息可查</h4><p>场镜次、卷号、机位、TC、帧率、LUT 版本与文件一一对应。</p></article>
+            <article class="eval-card reveal"><span>E</span><h4>交付可复现</h4><p>同一套输入、LUT、节点和设置能再次输出相同版本，有签名与时间。</p></article>
+          </div>
+
+          <div class="metric-warning reveal">
+            <div><span class="eyebrow">QC REALITY CHECK</span><h3>“能播放”只是最低门槛。</h3></div>
+            <p>如果声音错位 2 帧、LUT 版本用错、burn-in 遮住字幕区，文件依然能播放，却会直接影响剪辑与审片。以时间码定位问题，以清单定义完成，以回执证明交付。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="delivery">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">05</span><span class="eyebrow">DELIVERY / 归档、交接与职责</span></div>
+            <span class="time-chip">HANDOFF · 每个人拿到同一份真相</span>
+          </div>
+          <div class="delivery-stack">
+            <article class="delivery-card primary reveal"><span class="num">01</span><h3>素材包</h3><p>原始素材、双备份位置、校验报告、代理、时间码、声音和异常清单。原片永远保持原始目录与命名。</p><code>ORIGINAL · PROXY · HASH · REPORT</code></article>
+            <article class="delivery-card reveal"><span class="num">02</span><h3>影像包</h3><p>Show LUT、技术转换说明、CDL、监看设置、预览图和使用说明，标明版本与依赖色彩空间。</p><code>LUT · CDL · MONITOR REF</code></article>
+            <article class="delivery-card reveal"><span class="num">03</span><h3>交接单</h3><p>场镜次、相机、卷号、帧率、存储路径、交付平台、复核人和签收时间。</p><code>REPORT · SIGN-OFF</code></article>
+            <article class="delivery-card reveal"><span class="num">04</span><h3>归档卡</h3><p>项目名、日期范围、内容清单、介质编号、校验报告、存放位置、保留期限与取回方式。</p><code>ARCHIVE INDEX</code></article>
+          </div>
+
+          <h3 class="section-subtitle reveal">DIT 现场包：先保证链路，再追求效率</h3>
+          <div class="kit-grid">
+            <article class="kit-card reveal"><span>01</span><h4>计算与存储</h4><p>满足代理与备份吞吐的移动工作站；系统盘、工作盘、校验盘分离规划；关键项目带离线备份介质。</p></article>
+            <article class="kit-card reveal"><span>02</span><h4>读卡与线材</h4><p>相机对应读卡器、备用读卡器、足量高速线材、供电与转接方案。所有设备提前做整段素材实测。</p></article>
+            <article class="kit-card reveal"><span>03</span><h4>监看与测量</h4><p>校准监视器、遮光罩、无线或有线图传、波形与伪色工具；记录亮度、Gamma、色域和校准日期。</p></article>
+            <article class="kit-card reveal"><span>04</span><h4>色彩资产</h4><p>技术转换、Show LUT、CDL 模板、预览图、版本说明。文件名必须包含输入色彩空间与版本。</p></article>
+            <article class="kit-card reveal"><span>05</span><h4>同步与交付</h4><p>录音时间码方案、同步软件、代理模板、Dailies 模板、上传凭据与当天交付清单。</p></article>
+            <article class="kit-card reveal"><span>06</span><h4>现场耗材</h4><p>标签、记号笔、扎带、防尘防雨、UPS、备用电源、硬盘防震箱和可追溯的介质登记本。</p></article>
+          </div>
+
+          <div class="raci reveal">
+            <div class="raci-title"><span class="eyebrow">CREW RACI</span><h3>片场常见职责边界</h3></div>
+            <div class="raci-table" role="table" aria-label="剧组职责划分">
+              <div class="raci-row raci-head" role="row"><span>事项</span><span>制片</span><span>DIT</span><span>摄影指导</span><span>后期</span></div>
+              <div class="raci-row" role="row"><span>介质与清卡</span><span class="r-a">A</span><span class="r-r">R</span><span class="r-i">I</span><span class="r-i">I</span></div>
+              <div class="raci-row" role="row"><span>双备份与校验</span><span class="r-i">I</span><span class="r-a">A/R</span><span class="r-i">I</span><span class="r-c">C</span></div>
+              <div class="raci-row" role="row"><span>曝光与监看</span><span class="r-i">I</span><span class="r-r">R</span><span class="r-a">A</span><span class="r-i">I</span></div>
+              <div class="raci-row" role="row"><span>Show LUT / CDL</span><span class="r-i">I</span><span class="r-r">R</span><span class="r-a">A</span><span class="r-c">C</span></div>
+              <div class="raci-row" role="row"><span>Dailies 交付</span><span class="r-a">A</span><span class="r-r">R</span><span class="r-c">C</span><span class="r-c">C</span></div>
+              <div class="raci-row" role="row"><span>最终调色</span><span class="r-i">I</span><span class="r-c">C</span><span class="r-c">C</span><span class="r-a">A/R</span></div>
+            </div>
+            <p>R = 执行 · A = 最终负责 · C = 协作咨询 · I = 知会。实际项目以制片方职责表为准。</p>
+          </div>
+
+          <div class="checkpoint-contract reveal">
+            <span class="eyebrow">SIGN-OFF CONTRACT</span>
+            <h3>一次完整的交接，必须回答六个问题。</h3>
+            <div class="contract-chips"><span>来自哪张卡？</span><span>备份在哪？</span><span>哈希通过了吗？</span><span>用了哪个 LUT？</span><span>声音同步了吗？</span><span>谁签收？</span></div>
+          </div>
+        </section>
+
+        <section class="chapter" id="debug">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">06</span><span class="eyebrow">TROUBLESHOOT / 片场故障手册</span></div>
+            <span class="time-chip">STOP · ISOLATE · RECORD</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>不要“试一下再说”。<br>先定位在哪一层。</h2>
+            <div><p class="lead">按源卡、读卡链路、复制目标、解码、监看、声音、网络逐层排查。每次只改一个变量；涉及源卡写入、格式化或修复的操作必须先停下并上报。</p></div>
+          </div>
+          <div class="debug-table reveal">
+            <div class="debug-row debug-head"><span>症状</span><span>优先怀疑</span><span>最小验证</span><span>处理</span></div>
+            <div class="debug-row"><span>源卡读不到</span><span>读卡器 / 供电 / 介质</span><span>换可靠读卡器，只读测试</span><span>保留原卡；禁止写入式“修复”</span></div>
+            <div class="debug-row"><span>文件数对上但哈希错</span><span>传输损坏 / 同名覆盖</span><span>比对单文件哈希与大小</span><span>从源卡重拷到新目录；记录异常</span></div>
+            <div class="debug-row"><span>画面全黑或花屏</span><span>解码 / 显卡驱动 / 代理</span><span>播原片、换解码器、换机器</span><span>先判断源问题还是播放环境问题</span></div>
+            <div class="debug-row"><span>现场颜色和后期不同</span><span>LUT 顺序 / 色彩空间 / 校准</span><span>固定素材与截图逐层 bypass</span><span>核对 IDT、Show LUT、ODT 与监看模式</span></div>
+            <div class="debug-row"><span>声音不同步</span><span>TC 偏移 / 帧率 / 起录点</span><span>拍板帧与声音波形逐帧对齐</span><span>记录偏移；避免代理与声音二次漂移</span></div>
+            <div class="debug-row"><span>高光异常溢出</span><span>曝光 / EI / 监看 LUT</span><span>用原始信号看波形与伪色</span><span>区分源数据溢出与 LUT 显示裁切</span></div>
+            <div class="debug-row"><span>传输速度突然下降</span><span>缓存耗尽 / 热降速 / 线材</span><span>同一卡小文件批量测速</span><span>检查目标盘剩余空间、温度与链路</span></div>
+            <div class="debug-row"><span>Dailies 上传失败</span><span>网络 / 命名 / 平台规格</span><span>本地播放 + 单条小文件上传</span><span>保留待传队列；完成回执才关闭任务</span></div>
+          </div>
+          <div class="debug-rule reveal"><span>EMERGENCY RULE</span><p>任何涉及源卡写入、清卡、覆盖或格式化的操作，都先确认两份独立备份与播放抽检。现场压力越大，越要把这一步写下来。</p></div>
+        </section>
+
+        <section class="chapter" id="learn">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">07</span><span class="eyebrow">LEARNING PATH / 从会拷卡到能独立上机</span></div>
+            <span class="time-chip">7 DAYS · 学习地图</span>
+          </div>
+          <div class="learning-hero reveal">
+            <h2>不要只会点软件。<br>要能解释每一步为什么。</h2>
+            <p>从数字影像基础到片场独立操作，每天产出一个可检查的小成果：数据集、曝光报告、色彩链、同步测试、QC 报告或故障复盘。</p>
+          </div>
+          <div class="learning-roadmap">
+            <article class="learning-day reveal"><div class="day-no">D1</div><div class="day-body"><span>影像基础</span><h3>曝光、动态范围与色彩</h3><p>理解线性光、Log 曲线、色域、Gamma、位深、采样与 RAW/非 RAW 的差别。</p><small>产出：解释为什么 Log 画面灰，但不是坏画面。</small></div></article>
+            <article class="learning-day reveal"><div class="day-no">D2</div><div class="day-body"><span>相机与格式</span><h3>编码、卡与记录模式</h3><p>比较 ProRes、BRAW、R3D、X-OCN、ARRIRAW；理解分辨率、码率、帧率与升降格。</p><small>产出：为三种预算档配置可执行记录方案。</small></div></article>
+            <article class="learning-day reveal"><div class="day-no">D3</div><div class="day-body"><span>数据安全</span><h3>拷卡、哈希与 3-2-1</h3><p>掌握 Offload 软件、校验、报告、目录契约、RAID 与 LTO 的职责边界。</p><small>产出：完成一次模拟双备份和异常报告。</small></div></article>
+            <article class="learning-day reveal"><div class="day-no">D4</div><div class="day-body"><span>色彩管理</span><h3>IDT、ACES、CDL 与 LUT</h3><p>画出从相机到监看/交付的链路，分清技术转换和创作 Look。</p><small>产出：建立一条可复现的 Show LUT 流程。</small></div></article>
+            <article class="learning-day reveal"><div class="day-no">D5</div><div class="day-body"><span>现场系统</span><h3>监看、波形、同步与通信</h3><p>连接相机、监视器、无线图传、录音和计算机；理解现场角色与汇报路径。</p><small>产出：一张现场信号与数据流图。</small></div></article>
+            <article class="learning-day reveal"><div class="day-no">D6</div><div class="day-body"><span>后期交接</span><h3>代理、元数据、Dailies、QC</h3><p>制作可回套的代理，验证声画同步，按模板输出 Dailies 和报告。</p><small>产出：一份通过签收自检的 Dailies 包。</small></div></article>
+            <article class="learning-day reveal"><div class="day-no">D7</div><div class="day-body"><span>独立上机</span><h3>模拟完整拍摄日</h3><p>从接卡到清卡授权、从现场监看到 Dailies 回执，用检查表跑通一次。</p><small>产出：一份带故障注入和复盘的全日 SOP。</small></div></article>
+          </div>
+
+          <div class="paper-notes reveal">
+            <div class="paper-notes-head"><span class="eyebrow">STUDY REFERENCES / 学习资料</span><h3>手册优先，其次是项目实践</h3></div>
+            <div class="paper-grid">
+              <article><span>01</span><h4>ACES Documentation</h4><p>理解 IDT、ACEScct、LMT、ODT 与显示转换。先看流程图和使用场景，不必一开始啃完整规范。</p><a href="https://docs.acescentral.com/" target="_blank" rel="noreferrer">ACES Docs ↗</a></article>
+              <article><span>02</span><h4>ASC CDL</h4><p>了解 Slope、Offset、Power、Saturation 如何把一组初级调色参数跨系统传递。</p><a href="https://theasc.com/asc/asc-cdl" target="_blank" rel="noreferrer">ASC CDL ↗</a></article>
+              <article><span>03</span><h4>相机厂商操作手册</h4><p>具体菜单、RAW 元数据、EI、双卡策略和监看输出必须以你实际使用的机型手册为准。</p><a href="https://www.sony.com/" target="_blank" rel="noreferrer">Camera Manuals ↗</a></article>
+            </div>
+          </div>
+
+          <div class="glossary reveal">
+            <div class="glossary-title"><span class="eyebrow">POCKET GLOSSARY</span><h3>片场 DIT 口袋词表</h3></div>
+            <dl>
+              <div><dt>DIT</dt><dd>Digital Imaging Technician，负责数字影像技术、数据与色彩监看流程。</dd></div>
+              <div><dt>Offload</dt><dd>从相机介质复制、校验并登记素材的工作。</dd></div>
+              <div><dt>Checksum</dt><dd>用哈希验证源与副本内容一致，比文件大小更可靠。</dd></div>
+              <div><dt>Show LUT</dt><dd>现场监看/审片用 LUT，表达创作方向，不等于最终调色。</dd></div>
+              <div><dt>CDL</dt><dd>ASC Color Decision List，用标准化参数传递初级调色决定。</dd></div>
+              <div><dt>ACES</dt><dd>可扩展的学院色彩编码系统，以场景参考与 ODT 管理显示转换。</dd></div>
+              <div><dt>EI</dt><dd>Exposure Index，RAW 工作流中常用于调整监看与高光分配的曝光指数。</dd></div>
+              <div><dt>Burn-in</dt><dd>叠加在 Dailies 上的场镜次、TC、相机等参考信息。</dd></div>
+              <div><dt>Proxy</dt><dd>供剪辑浏览的低码率替身文件，需可回套原片。</dd></div>
+              <div><dt>Dailies</dt><dd>每日审片/剪辑参考版本，不是最终调色成片。</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="chapter quiz-section" id="quiz">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">QC</span><span class="eyebrow">KNOWLEDGE CHECK / 三题自测</span></div>
+            <span class="time-chip">FIELD CHECK · 3 MIN</span>
+          </div>
+          <div class="quiz-layout">
+            <div class="quiz-intro reveal">
+              <h2>你真的会把一张卡<br>安全送到后期吗？</h2>
+              <p>答完立即得到解释。三条底线分别对应素材安全、色彩解释和现场交接。</p>
+              <div class="quiz-score"><span id="quizScore">0</span><small>/ 3 CORRECT</small></div>
+            </div>
+            <div class="quiz-list">
+              <article class="quiz-card reveal" data-answer="b">
+                <span class="quiz-no">Q1 / 拷卡</span>
+                <h3>什么时候可以格式化摄影机原卡？</h3>
+                <div class="quiz-options">
+                  <button type="button" data-choice="a"><i>A</i>主工作盘已经复制完成</button>
+                  <button type="button" data-choice="b"><i>B</i>两份独立备份通过哈希和播放抽检，并完成签收</button>
+                  <button type="button" data-choice="c"><i>C</i>代理文件可以正常播放</button>
+                </div>
+                <p class="quiz-feedback">原卡是不可重拍的源证据。两份独立备份、完整性校验、播放抽检、报告与授权都完成后，才进入剧组规定的清卡步骤。</p>
+              </article>
+              <article class="quiz-card reveal" data-answer="c">
+                <span class="quiz-no">Q2 / 色彩</span>
+                <h3>现场监视器上套 Show LUT 后画面好看，说明什么？</h3>
+                <div class="quiz-options">
+                  <button type="button" data-choice="a"><i>A</i>原始素材已经被永久调色</button>
+                  <button type="button" data-choice="b"><i>B</i>最终成片一定就是这个颜色</button>
+                  <button type="button" data-choice="c"><i>C</i>这只说明当前监看链的显示结果，仍需记录 LUT 与色彩空间</button>
+                </div>
+                <p class="quiz-feedback">Show LUT 是监看解释，不是原片重写。必须记录 LUT 版本、输入/输出色彩空间、监视器和应用顺序，后期才能复现。</p>
+              </article>
+              <article class="quiz-card reveal" data-answer="a">
+                <span class="quiz-no">Q3 / Dailies</span>
+                <h3>发现某条素材声音错位 2 帧，正确做法是什么？</h3>
+                <div class="quiz-options">
+                  <button type="button" data-choice="a"><i>A</i>记录文件、时间码和偏移量，复核同步方式并通知负责人</button>
+                  <button type="button" data-choice="b"><i>B</i>只在上传平台的备注里写“有点不同步”</button>
+                  <button type="button" data-choice="c"><i>C</i>直接覆盖原片音频，让它听起来对上</button>
+                </div>
+                <p class="quiz-feedback">异常要可搜索、可定位、可关闭。保留原片，记录偏移与同步参考，修复应发生在代理/交付副本并留下新版本。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="closing reveal">
+          <span class="eyebrow">END OF SHIFT</span>
+          <h2>片场相信的，<br>不是你记得，<em>而是有记录。</em></h2>
+          <p>一张卡、一份哈希、一条 LUT、一次同步、一张回执，最终组成 DIT 对整部片子的可靠交付。</p>
+          <div class="closing-actions">
+            <a class="button button-primary" href="#top">回到顶部 ↑</a>
+            <button class="button button-ghost" id="printButtonBottom" type="button">导出 PDF</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div><span class="brand-mark small">D<span>i</span>T</span><p>Digital Imaging Technician<br>片场全流程工作手册 · 2026.10</p></div>
+    <p class="footer-note">离线可用 · 不依赖外部字体与资源<br>快捷键：按 <kbd>P</kbd> 打印，按 <kbd>Esc</kbd> 关闭菜单</p>
+    <a href="#top">BACK TO TOP ↑</a>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">已复制</div>
+  <script src="script.js"></script>
+</body>
+</html>

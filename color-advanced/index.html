@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="调色进阶学习：从审美观察、视觉语言和参考片拆解，到可量化的技术复现、变体与全片验证。">
+  <title>COLOR LAB 02 · 调色进阶与审美训练</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div class="reading-progress" aria-hidden="true"><span id="readingBar"></span></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark">C<span>2</span></span>
+      <span class="brand-copy">Color Lab 02<br><b>调色进阶实验室</b></span>
+    </a>
+    <nav class="top-nav" aria-label="主导航">
+      <a href="#map">图谱</a>
+      <a href="#aesthetic">审美</a>
+      <a href="#analysis">拆解</a>
+      <a href="#reproduce">复现</a>
+      <a href="#advanced">进阶</a>
+      <a href="#workshop">训练</a>
+    </nav>
+    <button class="icon-button" id="printButton" type="button" aria-label="打印或导出为 PDF" title="打印 / 导出 PDF">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg>
+    </button>
+    <button class="menu-button" id="menuButton" type="button" aria-label="打开目录" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <span class="eyebrow">ADVANCED INDEX / 进阶目录</span>
+    <a href="#premise">00 / 进阶判断</a>
+    <a href="#map">01 / 审美 × 技术图谱</a>
+    <a href="#aesthetic">02 / 审美学习法</a>
+    <a href="#analysis">03 / 参考片拆解</a>
+    <a href="#reproduce">04 / 技术复现</a>
+    <a href="#advanced">05 / 高级工具与节点</a>
+    <a href="#workshop">06 / 审美与复现训练</a>
+    <a href="#learn">07 / 90 天路线</a>
+    <a href="#debug">08 / 复现故障手册</a>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <div class="eyebrow reveal">COLOR LAB 02 · AESTHETIC &amp; REPRODUCTION</div>
+        <h1 class="reveal">先看见。<br><em>再复现。</em></h1>
+        <p class="hero-lede">调色的进阶，不是记住更多预设，而是把“我觉得好看”翻译成可讨论的视觉语言，再把这种语言拆成可复现的色彩管理、节点与质感路径。</p>
+        <div class="hero-actions reveal">
+          <a class="button button-primary" href="#map">打开进阶图谱 <span>↓</span></a>
+          <a class="button button-ghost" href="#reproduce">进入复现实验室</a>
+        </div>
+        <div class="hero-meta reveal">
+          <div><strong>06</strong><span>审美观察维度</span></div>
+          <div><strong>07</strong><span>技术复现层级</span></div>
+          <div><strong>90</strong><span>天进阶路线</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="visual-topline"><span>REFERENCE RECONSTRUCTION BENCH</span><span class="live-dot">MATCH</span></div>
+        <div class="compare-shell">
+          <canvas id="referenceCanvas" width="720" height="440" aria-label="参考画面与复现画面的拖动对比"></canvas>
+          <div class="compare-tag target-tag">REFERENCE</div>
+          <div class="compare-tag attempt-tag">RECONSTRUCTION</div>
+          <div class="compare-line"></div>
+        </div>
+        <div class="match-strip">
+          <div><span>LUMINANCE</span><b id="lumaMatch">96%</b></div>
+          <div><span>PALETTE</span><b id="paletteMatch">91%</b></div>
+          <div><span>TEXTURE</span><b id="textureMatch">88%</b></div>
+          <div class="node-chip">CM → BAL → SHAPE → LOOK → FIN</div>
+        </div>
+        <div class="hero-control">
+          <div><label for="compareSlider">拖动比较参考与复现</label><span id="compareState">WIPE 52% · 技术相似 ≠ 创作相同</span></div>
+          <input id="compareSlider" type="range" min="0" max="100" value="52" aria-label="参考与复现画面比较">
+        </div>
+      </div>
+      <div class="hero-index" aria-hidden="true">SEE / NAME<br>DECONSTRUCT / REPEAT</div>
+    </section>
+
+    <div class="page-shell">
+      <aside class="side-rail" aria-label="章节目录">
+        <div class="rail-sticky">
+          <p class="rail-label">ADVANCED INDEX</p>
+          <nav id="railNav">
+            <a href="#premise"><span>00</span>进阶判断</a>
+            <a href="#map"><span>01</span>进阶图谱</a>
+            <a href="#aesthetic"><span>02</span>审美学习</a>
+            <a href="#analysis"><span>03</span>参考拆解</a>
+            <a href="#reproduce"><span>04</span>技术复现</a>
+            <a href="#advanced"><span>05</span>高级方法</a>
+            <a href="#workshop"><span>06</span>刻意训练</a>
+            <a href="#learn"><span>07</span>90 天路线</a>
+            <a href="#debug"><span>08</span>故障手册</a>
+          </nav>
+          <div class="rail-note"><span class="status-light"></span><p>不是复制一张图，<br>是理解一套选择。</p></div>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="chapter" id="premise">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">00</span><span class="eyebrow">ADVANCED MINDSET / 进阶判断</span></div>
+            <span class="time-chip">FROM OUTPUT TO INTENT</span>
+          </div>
+          <div class="intro-grid">
+            <div class="intro-heading reveal"><h2>进阶不是“更难的工具”，<br>是更清楚的选择。</h2></div>
+            <div class="intro-copy reveal">
+              <p>基础阶段解决“参数在哪里”；进阶阶段解决“为什么是这个参数，它和其他镜头如何组成一个世界”。审美让你知道方向，技术让你能把方向稳定地交给观众。</p>
+              <blockquote>审美不是主观借口，技术也不是客观终点。真正可靠的调色，是能被感受、被解释、被复现，并在连续镜头中保持一致。</blockquote>
+            </div>
+          </div>
+
+          <div class="thinking-triad reveal">
+            <article><span>01 / SEE</span><h3>看见关系</h3><p>第一眼看哪里？光从哪里来？暗部保留什么？颜色怎样分配空间？先描述，不急于调。</p><b>Perception</b></article>
+            <article><span>02 / NAME</span><h3>命名选择</h3><p>用“低饱和冷环境 + 局部暖肤色”替代“高级感”。可命名的东西才能比较和学习。</p><b>Language</b></article>
+            <article><span>03 / REPEAT</span><h3>技术复现</h3><p>把参考拆成信号、色彩、空间、运动与质感，按因果搭建，而不是一次套一个 LUT。</p><b>Execution</b></article>
+          </div>
+
+          <div class="seven-loop reveal">
+            <div class="loop-title"><span class="eyebrow">AESTHETIC LOOP</span><h3>审美学习的七步闭环</h3></div>
+            <div class="loop-row">
+              <span>01 观察</span><i>→</i><span>02 命名</span><i>→</i><span>03 比较</span><i>→</i><span>04 拆解</span><i>→</i><span>05 复现</span><i>→</i><span>06 变体</span><i>→</i><span>07 批评</span>
+            </div>
+            <p>每一步都要留下证据：截图、示波器、节点图、参数记录或文字复盘。没有记录，只能叫“感觉好”，很难进阶。</p>
+          </div>
+
+          <div class="thesis-strip">
+            <span>THE ADVANCED QUESTION</span>
+            <p>这张画面在叙事上必须完成什么？技术、审美和连续镜头，是否都服务于同一件事？</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="map">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">01</span><span class="eyebrow">AESTHETIC × TECHNICAL MIND MAP</span></div>
+            <button class="reset-button" id="downloadMindMap" type="button">下载 SVG 图谱</button>
+          </div>
+          <div class="chapter-title-row reveal">
+            <h2>让“审美”与“技术”<br>在同一张图上相遇。</h2>
+            <p>点击任一知识域，查看它在进阶学习中的位置。地图不是目录，而是你诊断“缺的是观察、语言，还是执行”的工具。</p>
+          </div>
+          <div class="map-layout reveal">
+            <div class="map-scroll">
+              <svg id="advancedMap" class="advanced-map" viewBox="0 0 1040 720" role="img" aria-labelledby="mapTitle mapDesc">
+                <title id="mapTitle">调色进阶审美与技术思维导图</title>
+                <desc id="mapDesc">以调色进阶为中心，连接视觉语法、色彩叙事、光影空间、质感、参考拆解、技术还原、变体迁移与序列控制八个分支。</desc>
+                <g class="map-lines">
+                  <path d="M435 350 C330 350 290 100 160 100"/>
+                  <path d="M430 365 C290 365 270 235 160 235"/>
+                  <path d="M430 382 C290 382 270 485 160 485"/>
+                  <path d="M440 402 C330 402 295 620 160 620"/>
+                  <path d="M605 350 C710 350 750 100 880 100"/>
+                  <path d="M610 365 C750 365 770 235 880 235"/>
+                  <path d="M610 382 C750 382 770 485 880 485"/>
+                  <path d="M600 402 C710 402 745 620 880 620"/>
+                </g>
+                <g class="map-branch" data-map="grammar" tabindex="0" role="button" aria-label="视觉语法">
+                  <rect x="28" y="64" width="234" height="74" rx="2"/><text class="map-num" x="43" y="91">01</text><text class="map-name" x="72" y="91">视觉语法</text><text class="map-sub" x="72" y="116">构图 · 层级 · 视线</text>
+                </g>
+                <g class="map-branch" data-map="story" tabindex="0" role="button" aria-label="色彩叙事">
+                  <rect x="28" y="199" width="234" height="74" rx="2"/><text class="map-num" x="43" y="226">02</text><text class="map-name" x="72" y="226">色彩叙事</text><text class="map-sub" x="72" y="251">情绪 · 主辅色 · 对比</text>
+                </g>
+                <g class="map-branch" data-map="light" tabindex="0" role="button" aria-label="光影空间">
+                  <rect x="28" y="449" width="234" height="74" rx="2"/><text class="map-num" x="43" y="476">03</text><text class="map-name" x="72" y="476">光影空间</text><text class="map-sub" x="72" y="501">主光 · 负空间 · 分离</text>
+                </g>
+                <g class="map-branch" data-map="texture" tabindex="0" role="button" aria-label="影像质感">
+                  <rect x="28" y="584" width="234" height="74" rx="2"/><text class="map-num" x="43" y="611">04</text><text class="map-name" x="72" y="611">影像质感</text><text class="map-sub" x="72" y="636">滚降 · 光晕 · 颗粒</text>
+                </g>
+                <g class="map-branch" data-map="deconstruct" tabindex="0" role="button" aria-label="参考拆解">
+                  <rect x="778" y="64" width="234" height="74" rx="2"/><text class="map-num" x="793" y="91">05</text><text class="map-name" x="822" y="91">参考拆解</text><text class="map-sub" x="822" y="116">亮度 · 色相 · 材质</text>
+                </g>
+                <g class="map-branch" data-map="reproduce" tabindex="0" role="button" aria-label="技术还原">
+                  <rect x="778" y="199" width="234" height="74" rx="2"/><text class="map-num" x="793" y="226">06</text><text class="map-name" x="822" y="226">技术还原</text><text class="map-sub" x="822" y="251">CM · 节点 · 遮罩</text>
+                </g>
+                <g class="map-branch" data-map="variation" tabindex="0" role="button" aria-label="变体迁移">
+                  <rect x="778" y="449" width="234" height="74" rx="2"/><text class="map-num" x="793" y="476">07</text><text class="map-name" x="822" y="476">变体迁移</text><text class="map-sub" x="822" y="501">泛化 · 适度 · 调整</text>
+                </g>
+                <g class="map-branch" data-map="sequence" tabindex="0" role="button" aria-label="序列控制">
+                  <rect x="778" y="584" width="234" height="74" rx="2"/><text class="map-num" x="793" y="611">08</text><text class="map-name" x="822" y="611">序列控制</text><text class="map-sub" x="822" y="636">连续 · 节奏 · 交付</text>
+                </g>
+                <g class="map-center">
+                  <circle cx="520" cy="355" r="104"/>
+                  <text class="center-big" x="520" y="340">审美 × 技术</text>
+                  <text class="center-small" x="520" y="369">ADVANCED COLOR</text>
+                  <text class="center-small" x="520" y="390">选择需被复现</text>
+                </g>
+              </svg>
+            </div>
+            <aside class="map-detail" id="mapDetail" aria-live="polite">
+              <span class="eyebrow" id="mapKicker">MAP / START HERE</span>
+              <h3 id="mapHeading">审美与技术不是两门课</h3>
+              <p id="mapText">审美负责决定值得复现什么，技术负责让选择可重复。进阶练习的核心，是把二者接成一条能被验证的链。</p>
+              <div class="map-tags" id="mapTags"><span>观察</span><span>命名</span><span>拆解</span><span>复现</span></div>
+              <a id="mapLink" href="#aesthetic">从审美学习法开始 ↓</a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="chapter" id="aesthetic">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">02</span><span class="eyebrow">AESTHETIC LEARNING / 审美学习法</span></div>
+            <span class="time-chip">DAILY PRACTICE · 15 MIN</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>审美不是“多看图”，<br>是有结构地看图。</h2>
+            <div>
+              <p class="lead">每天浏览一百张图，不如认真拆解三张。先不看滤镜名，不猜 LUT。按“光、形、色、质、空间、叙事”六层观察，把模糊感受转成可比较的判断。</p>
+              <p class="warning-inline"><b>避免只说“高级”：</b>高级在哪里？低饱和、大留白、硬光、冷背景衬托暖皮肤，还是高光滚降柔和？说清楚才有学习价值。</p>
+            </div>
+          </div>
+
+          <div class="observation-grid">
+            <article class="observation-card reveal"><span>01 / LIGHT</span><h3>光</h3><p>方向、软硬、反差、色温、光源动机。先判断主体是被主光塑造，还是被环境光吞没。</p><div class="micro-example light-example"><i></i></div></article>
+            <article class="observation-card reveal"><span>02 / FORM</span><h3>形</h3><p>视线路径、几何、留白、遮挡、画面重量。色彩调色并不能修复所有构图问题。</p><div class="micro-example form-example"><i></i><i></i></div></article>
+            <article class="observation-card reveal"><span>03 / COLOR</span><h3>色</h3><p>主色、辅色、是否对立、肤色如何被环境反射、颜色如何分区。不要用色相环简单解释所有情绪。</p><div class="micro-example color-example"><i></i><i></i><i></i></div></article>
+            <article class="observation-card reveal"><span>04 / TEXTURE</span><h3>质</h3><p>锐度、柔和度、颗粒、光晕、镜头缺陷与高光滚降。质感应当可以解释来源。</p><div class="micro-example texture-example"></div></article>
+            <article class="observation-card reveal"><span>05 / SPACE</span><h3>空间</h3><p>前中后景是否靠亮度、饱和度、色相或清晰度分离。主体是否从背景里“长出来”。</p><div class="micro-example space-example"><i></i><i></i></div></article>
+            <article class="observation-card reveal"><span>06 / STORY</span><h3>叙事</h3><p>颜色为什么出现在这个时刻？它制造安全、疏离、怀旧、危险还是希望？没有叙事目的的“风格”很脆弱。</p><div class="micro-example story-example"><i></i></div></article>
+          </div>
+
+          <div class="vocabulary-lab reveal">
+            <div class="vocabulary-head">
+              <div><span class="eyebrow">LOOK VOCABULARY / 视觉词表</span><h3>把“感觉”翻译成可执行语言</h3></div>
+              <span>从模糊词到判断</span>
+            </div>
+            <div class="vocab-table">
+              <div class="vocab-row head"><span>模糊说法</span><span>视觉事实</span><span>可能的技术动作</span></div>
+              <div class="vocab-row"><span>“很电影感”</span><span>高光柔和滚降、黑位有细节、肤色与背景分层</span><span>Curves / tone mapping / local contrast</span></div>
+              <div class="vocab-row"><span>“冷峻但有温度”</span><span>整体冷环境 + 主体肤色或实用光偏暖</span><span>Color warper / qualifier / power window</span></div>
+              <div class="vocab-row"><span>“高级灰”</span><span>饱和度收敛、颜色跨度窄、黑位不压死</span><span>低饱和轴 + 精细曲线 + 高光控制</span></div>
+              <div class="vocab-row"><span>“很脏”</span><span>混合色浑浊、肤色偏绿、暗部色相冲突</span><span>修白点、限制色相跨度、分组处理</span></div>
+              <div class="vocab-row"><span>“太假”</span><span>肤色失去环境反射、边缘光不自然、颜色超出可信范围</span><span>收窄遮罩、保留高光、降低全局色偏</span></div>
+              <div class="vocab-row"><span>“不够通透”</span><span>反差分布平均，主体与背景没有明确分离</span><span>调整 pivot、局部对比、深度与色相分离</span></div>
+            </div>
+          </div>
+
+          <div class="daily-drill reveal">
+            <div class="daily-copy"><span class="eyebrow">15-MINUTE EYE DRILL</span><h3>每天三张图，建立审美语料库</h3><p>不是收藏图片，而是训练注意力和语言。每张只写一句事实、一句因果和一个可尝试的技术动作。</p></div>
+            <div class="drill-steps">
+              <div><span>01</span><b>眯眼 5 秒</b><p>只看大块的明暗与视线落点。</p></div>
+              <div><span>02</span><b>说 3 个词</b><p>避开“高级、好看”，只描述可观察特征。</p></div>
+              <div><span>03</span><b>找 1 个因果</b><p>为什么视线会停在那里？</p></div>
+              <div><span>04</span><b>写 1 个动作</b><p>如果复现，先动哪个参数？</p></div>
+            </div>
+          </div>
+
+          <h3 class="section-subtitle reveal">视觉判断小练习</h3>
+          <p class="section-note reveal">点选你认为更符合题干要求的画面，查看解释。练习不追求唯一正确答案，而追求能否说出判断依据。</p>
+          <div class="eye-pairs">
+            <article class="pair-card reveal" data-answer="a">
+              <div class="pair-head"><span>DRILL 01</span><h4>哪一张有更明确的视觉焦点？</h4></div>
+              <div class="pair-choices">
+                <button type="button" data-choice="a"><span class="pair-frame focus-clear"><i></i></span><b>A · 单一暖光焦点</b></button>
+                <button type="button" data-choice="b"><span class="pair-frame focus-busy"><i></i><i></i><i></i></span><b>B · 多点高饱和</b></button>
+              </div>
+              <p class="pair-feedback">视觉焦点来自对比的集中，而不是颜色数量。暖光、亮度和背景低饱和共同让视线集中到主体上。</p>
+            </article>
+            <article class="pair-card reveal" data-answer="b">
+              <div class="pair-head"><span>DRILL 02</span><h4>哪一张更保留暗部结构？</h4></div>
+              <div class="pair-choices">
+                <button type="button" data-choice="a"><span class="pair-frame shadow-crushed"><i></i></span><b>A · 纯黑剪影</b></button>
+                <button type="button" data-choice="b"><span class="pair-frame shadow-detail"><i></i></span><b>B · 暗部仍可读</b></button>
+              </div>
+              <p class="pair-feedback">风格化压暗不是把暗部全部切掉。保留一点结构与环境色，画面通常更有层次，也更有后期调整余地。</p>
+            </article>
+            <article class="pair-card reveal" data-answer="a">
+              <div class="pair-head"><span>DRILL 03</span><h4>哪一种冷暖关系更有空间分离？</h4></div>
+              <div class="pair-choices">
+                <button type="button" data-choice="a"><span class="pair-frame split-warmcool"><i></i></span><b>A · 冷背景 + 暖主体</b></button>
+                <button type="button" data-choice="b"><span class="pair-frame flat-color"><i></i></span><b>B · 全体单色偏黄</b></button>
+              </div>
+              <p class="pair-feedback">冷暖分离只是分离手段之一。它的价值在于让主体与空间关系清楚，而不是机械地把所有阴影变青、高光变橙。</p>
+            </article>
+          </div>
+          <div class="eye-score reveal"><span>EYE SCORE</span><strong id="eyeScore">0 / 3</strong><p id="eyeVerdict">先观察，再选择。</p></div>
+        </section>
+
+        <section class="chapter chapter-dark" id="analysis">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">03</span><span class="eyebrow">REFERENCE DECONSTRUCTION / 参考片拆解</span></div>
+            <span class="time-chip">SEE THE CAUSE · NOT THE FILTER</span>
+          </div>
+          <div class="dark-title reveal">
+            <h2>一张参考画面里，<br>至少同时有六件事在发生。</h2>
+            <p>亮度决定视线，色彩分配情绪，光位塑造体积，材质建立年代与媒介感，运动改变阅读顺序，叙事决定哪些“好看”值得保留。</p>
+          </div>
+
+          <div class="analysis-lab reveal">
+            <div class="analysis-stage">
+              <canvas id="analysisCanvas" width="760" height="470" aria-label="参考画面的亮度、色彩、光线与质感拆解"></canvas>
+              <div class="analysis-overlay"><span id="analysisState">FULL FRAME</span><span>REFERENCE / STUDY ONLY</span></div>
+            </div>
+            <div class="analysis-panel">
+              <span class="eyebrow">DECONSTRUCTION LENS</span>
+              <h3>切换观察层</h3>
+              <div class="analysis-tabs" role="tablist" aria-label="参考画面观察方式">
+                <button type="button" role="tab" aria-selected="true" data-analysis="full">完整画面</button>
+                <button type="button" role="tab" aria-selected="false" data-analysis="luma">亮度</button>
+                <button type="button" role="tab" aria-selected="false" data-analysis="palette">色彩</button>
+                <button type="button" role="tab" aria-selected="false" data-analysis="light">光线</button>
+                <button type="button" role="tab" aria-selected="false" data-analysis="texture">质感</button>
+              </div>
+              <div class="analysis-copy" id="analysisCopy">
+                <span class="analysis-step">01 / WHOLE IMAGE</span>
+                <h4>先看视觉层级</h4>
+                <p>主体处于暖光与低饱和冷环境之间；高亮区域集中，背景细节被有意压住。视线先落在面部，再沿着窗光移动到空间深处。</p>
+              </div>
+              <div class="analysis-stats">
+                <div><span>KEY LIGHT</span><b>RIGHT / WARM</b></div>
+                <div><span>CONTRAST</span><b>MEDIUM-HIGH</b></div>
+                <div><span>TEXTURE</span><b>GENTLE HALATION</b></div>
+                <div><span>PALETTE</span><b>TEAL + AMBER</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="deconstruct-steps">
+            <article class="deconstruct-card reveal"><span>01</span><h4>把观感拆成事实</h4><p>“温暖”要拆成哪块区域偏暖、暖了多少、与什么颜色对比；“柔”要拆成高光滚降、低微反差和颗粒。</p></article>
+            <article class="deconstruct-card reveal"><span>02</span><h4>区分内容与调色</h4><p>服装、灯光、美术和镜头本身已经贡献了风格。不要把所有差异都塞进节点里。</p></article>
+            <article class="deconstruct-card reveal"><span>03</span><h4>按因果排序</h4><p>先解决输入空间，再调曝光、对比、色彩关系、局部与质感。顺序错了，复现会变得不可解释。</p></article>
+            <article class="deconstruct-card reveal"><span>04</span><h4>做差异清单</h4><p>列出当前画面与参考的亮度、色相、饱和度、肤色、空间和质感差异，再逐项处理。</p></article>
+          </div>
+        </section>
+
+        <section class="chapter" id="reproduce">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">04</span><span class="eyebrow">TECHNICAL REPRODUCTION / 技术复现</span></div>
+            <span class="time-chip">LAYER BY LAYER · MEASURE · VERIFY</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>复现不是复制像素，<br>是重建一条选择路径。</h2>
+            <div><p class="lead">参考截图可能经过压缩、显示转换和平台映射，不能直接当成“真相”。先建立色彩管理的共同语言，再按亮度、色彩、局部和质感拆层级，最后在同一场景里检验泛化。</p></div>
+          </div>
+
+          <div class="reproduction-stack reveal">
+            <div class="repro-index"><span>07</span><b>REPRODUCTION<br>STACK</b><p>每一层都可被检查、旁路与解释。</p></div>
+            <div class="repro-row"><span>07</span><b>Texture / Finish</b><p>Halation、Bloom、Grain、滚降；最后才加，避免掩盖基础问题。</p></div>
+            <div class="repro-row"><span>06</span><b>Local Separation</b><p>窗口、跟踪、遮罩、对象分离；检查 Matte 与运动。</p></div>
+            <div class="repro-row"><span>05</span><b>Look / Color Story</b><p>主辅色、阴影与高光倾向、饱和度策略；服务叙事。</p></div>
+            <div class="repro-row"><span>04</span><b>Contrast Shape</b><p>黑位、白位、Pivot、滚降和高光肩膀。</p></div>
+            <div class="repro-row"><span>03</span><b>Balance</b><p>曝光、白点、色温、肤色基础关系。</p></div>
+            <div class="repro-row"><span>02</span><b>Color Management</b><p>Input、Working、Display、Output；只转换一次。</p></div>
+            <div class="repro-row source-row"><span>01</span><b>Reference Intent</b><p>这张画面为什么这样？哪些来自灯光、美术、镜头和调色？</p></div>
+          </div>
+
+          <div class="repro-lab reveal">
+            <div class="repro-head">
+              <div><span class="eyebrow">REPRODUCTION BENCH / 交互式复现台</span><h3>目标不可变，你的选择可调。</h3></div>
+              <div class="match-score"><span>APPROX. MATCH</span><strong id="matchScore">72%</strong></div>
+            </div>
+            <div class="canvas-pair">
+              <div><canvas id="targetCanvas" width="620" height="350" aria-label="目标参考画面"></canvas><span>REFERENCE</span></div>
+              <div><canvas id="attemptCanvas" width="620" height="350" aria-label="参数调整后的复现画面"></canvas><span>YOUR GRADE</span></div>
+            </div>
+            <div class="repro-controls">
+              <label for="reproExposure">曝光偏移 <output id="reproExposureOut">0.00</output></label>
+              <input id="reproExposure" type="range" min="-0.6" max="0.6" step="0.05" value="0">
+              <label for="reproContrast">对比 <output id="reproContrastOut">0.00</output></label>
+              <input id="reproContrast" type="range" min="-1" max="1" step="0.05" value="0">
+              <label for="reproTemperature">冷暖 <output id="reproTemperatureOut">0</output></label>
+              <input id="reproTemperature" type="range" min="-100" max="100" step="1" value="0">
+              <label for="reproSaturation">饱和度 <output id="reproSaturationOut">1.00</output></label>
+              <input id="reproSaturation" type="range" min="0.5" max="1.5" step="0.01" value="1">
+              <label for="reproHalation">高光扩散 <output id="reproHalationOut">0%</output></label>
+              <input id="reproHalation" type="range" min="0" max="100" step="1" value="0">
+              <button type="button" id="resetRepro" class="reset-button">重置复现参数</button>
+            </div>
+            <div class="recipe-output">
+              <span>RECIPE</span><code id="recipeCode">BALANCE +0.00 · CONTRAST +0.00 · TEMP 0 · SAT 1.00 · HALATION 0%</code>
+            </div>
+          </div>
+
+          <div class="callout reveal"><span>!</span><p><b>相似度不是创作目标。</b>交互分值只是参数接近度示意，真实的像素比较还要考虑显示转换、镜头、颗粒与内容差异。技术复现的终点，是在自己的素材上保持同样的视觉逻辑。</p></div>
+
+          <h3 class="section-subtitle reveal">复现的正确顺序</h3>
+          <div class="execution-steps">
+            <article class="execution-step reveal"><span>01</span><h4>统一观看条件</h4><p>把参考和目标置于同一色彩管理、同一显示转换、相近亮度环境。不要拿未管理的网页截图直接比对。</p></article>
+            <article class="execution-step reveal"><span>02</span><h4>先匹配明暗</h4><p>看大块亮度关系、黑位、白位和高光分布。眯眼比对可以减少颜色对明度判断的干扰。</p></article>
+            <article class="execution-step reveal"><span>03</span><h4>再匹配色彩</h4><p>确定主色、辅色、肤色与环境色，不要先追单个色相。用分区和范围判断，而不是全文偏色。</p></article>
+            <article class="execution-step reveal"><span>04</span><h4>最后做质感</h4><p>重建滚降、Halation、Bloom 与 Grain，并检查它们在运动中的稳定性。</p></article>
+            <article class="execution-step reveal"><span>05</span><h4>脱离参考检验</h4><p>换一张同场景素材，应用你的节点逻辑。只在参考画面上成立，说明你做的是贴图，不是风格。</p></article>
+            <article class="execution-step reveal"><span>06</span><h4>记录可复现配方</h4><p>保存节点、Still、LUT、色彩空间、项目设置和版本，让第二个人能够重建你的结果。</p></article>
+          </div>
+        </section>
+
+        <section class="chapter chapter-dark" id="advanced">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">05</span><span class="eyebrow">ADVANCED TOOLS / 高级方法与节点</span></div>
+            <span class="time-chip">TECHNIQUE · COMPLEXITY WITH PURPOSE</span>
+          </div>
+          <div class="dark-title reveal">
+            <h2>高级技术不是更复杂，<br>而是更精确地控制关系。</h2>
+            <p>在色彩管理明确的前提下，色彩变换、色域映射、局部分离、合成与质感才有意义。节点的复杂度必须带来可控性，而不是让故障难以定位。</p>
+          </div>
+
+          <div class="advanced-tools">
+            <article class="advanced-card reveal"><span>01 / HUE × LUM</span><h3>Hue vs Luminance</h3><p>控制特定色相区间的明度，让蓝天、肤色、植物或霓虹光拥有独立层次。先看上下文，避免产生不自然色块。</p><code>Targeted tonal separation</code></article>
+            <article class="advanced-card reveal"><span>02 / GAMUT</span><h3>Gamut Mapping</h3><p>把超出目标显示范围的颜色有序压回，而不是粗暴削掉。不同映射策略会影响高饱和高光的色相与细节。</p><code>Perceptual / compress / clip</code></article>
+            <article class="advanced-card reveal"><span>03 / TONE</span><h3>Tone Mapping</h3><p>在高动态范围与显示目标之间分配亮度，保护高光层次与面部。不能把所有高光都压成一个平灰面。</p><code>Shoulder / roll-off / pivot</code></article>
+            <article class="advanced-card reveal"><span>04 / MATTE</span><h3>Composite Logic</h3><p>限定器、窗口、跟踪和 Layer Mixer 共同决定局部结果。先看 Matte，再评价颜色；遮罩错了，颜色再好也不成立。</p><code>Key → Clean → Track → Mix</code></article>
+            <article class="advanced-card reveal"><span>05 / HDR</span><h3>HDR / SDR Trim</h3><p>用受控的 trim pass 管理不同亮度版本的相对关系。不要用一个 LUT 同时解释所有显示目标和观看环境。</p><code>PQ / HLG / 100-nit SDR</code></article>
+            <article class="advanced-card reveal"><span>06 / FINISH</span><h3>Grain &amp; Halation</h3><p>颗粒大小、强度与高光扩散应随镜头、分辨率和输出而变。目标是建立媒介感，不是给每个镜头打同一层噪点。</p><code>Scale-aware texture</code></article>
+          </div>
+
+          <div class="advanced-nodes reveal">
+            <div class="advanced-node-head">
+              <div><span class="eyebrow">ADVANCED NODE BLUEPRINTS</span><h3>复杂结构也要保持可读</h3></div>
+              <div class="tabs" role="tablist" aria-label="进阶节点结构">
+                <button type="button" role="tab" aria-selected="true" data-tab="node-managed">Managed Look</button>
+                <button type="button" role="tab" aria-selected="false" data-tab="node-trim">HDR Trim</button>
+                <button type="button" role="tab" aria-selected="false" data-tab="node-local">Local Composite</button>
+              </div>
+            </div>
+            <div class="node-panels">
+              <div class="node-panel active" data-panel="node-managed">
+                <div class="blueprint">
+                  <span>01<br><small>CAMERA</small></span><i>→</i><span>02<br><small>INPUT CM</small></span><i>→</i><span class="hot">03<br><small>BALANCE</small></span><i>→</i><span>04<br><small>MATCH</small></span><i>→</i><span class="hot">05<br><small>LOOK</small></span><i>→</i><span>06<br><small>OUTPUT CM</small></span>
+                </div>
+                <p><b>适用：</b>多数管理型项目。输入/输出转换明确，Look 与镜头校正分离，方便在序列中沿用和快速 Bypass 诊断。</p>
+              </div>
+              <div class="node-panel" data-panel="node-trim">
+                <div class="blueprint">
+                  <span>01<br><small>HDR BASE</small></span><i>→</i><span class="hot">02<br><small>HDR LOOK</small></span><i>→</i><span>03<br><small>HDR MASTER</small></span><i>→</i><span>04<br><small>SDR TRIM</small></span><i>→</i><span>05<br><small>SDR DELIVERY</small></span>
+                </div>
+                <p><b>适用：</b>同时管理 HDR 与 SDR。先建立可解释的基准，再做目标显示 trim；不要在每个 node 内混用不同显示空间。</p>
+              </div>
+              <div class="node-panel" data-panel="node-local">
+                <div class="blueprint layered">
+                  <span>01<br><small>BASE</small></span><i>→</i><span>02<br><small>FACE</small></span><span>03<br><small>SKY</small></span><span>04<br><small>BG</small></span><i>→</i><span class="hot">05<br><small>MIX</small></span><i>→</i><span>06<br><small>FINISH</small></span>
+                </div>
+                <p><b>适用：</b>人物与环境需要独立控制。局部节点从同一输入出发，Layer/Key 控制叠加；重点检查遮罩边界和时域稳定性。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="taste-warning reveal"><span>TASTE TRAP</span><p>“风格化”不等于压黑、强行青橙或加满颗粒。真正的高级感通常来自克制、明确的主次关系，以及和题材匹配的质感。</p></div>
+        </section>
+
+        <section class="chapter" id="workshop">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">06</span><span class="eyebrow">DELIBERATE PRACTICE / 审美与复现训练</span></div>
+            <span class="time-chip">OUTPUT · REPEAT · CRITIQUE</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>每次都交付作品，<br>不要只消费教程。</h2>
+            <div><p class="lead">进阶能力来自被约束的练习：限定时间、限定参考、限定工具、必须写复盘。每一次复现都要产出 Still、节点截图、参数记录和一段自我评价。</p></div>
+          </div>
+
+          <div class="project-grid">
+            <article class="project-card reveal"><span>PROJECT 01 · 2H</span><h3>单帧复现</h3><p>选一张版权允许研究的画面。先写六个视觉词，再拆成光、对比、色彩、局部、质感。禁止直接套风格 LUT。</p><ul><li>目标：结构相似，而非像素伪装</li><li>交付：Still + 节点图 + 一页分析</li></ul></article>
+            <article class="project-card reveal"><span>PROJECT 02 · 4H</span><h3>三镜匹配</h3><p>拿同一场景的三条不同曝光素材。选 Hero Shot，建立共享结构，再逐镜修正，确保剪辑点不跳。</p><ul><li>目标：连续播放稳定</li><li>交付：三联 Still + 播放版</li></ul></article>
+            <article class="project-card reveal"><span>PROJECT 03 · 6H</span><h3>风格迁移</h3><p>把学到的 Look 应用到自己拍摄的新素材，而非原参考。保留同一视觉逻辑，但改变内容与光线条件。</p><ul><li>目标：能泛化，不复制单图</li><li>交付：原片 / 结果 / 限制说明</li></ul></article>
+            <article class="project-card reveal"><span>PROJECT 04 · 1D</span><h3>30 秒段落</h3><p>完成从镜头匹配、局部塑形、风格、质感到输出的完整段落。要求有起承转合，而不是无限循环的单帧。</p><ul><li>目标：序列叙事与节奏</li><li>交付：成片 + QC 报告 + 复盘</li></ul></article>
+          </div>
+
+          <div class="rubric-lab reveal">
+            <div class="rubric-head"><div><span class="eyebrow">CRITIQUE RUBRIC</span><h3>作品不要只用“好不好看”评价</h3></div><span>自我评审表</span></div>
+            <div class="rubric-grid">
+              <div><b>01</b><h4>技术正确</h4><p>色彩管理、数据范围、输出标签、肤色与高光无技术错误。</p><span>20%</span></div>
+              <div><b>02</b><h4>视觉层级</h4><p>主体、环境、视线与明暗关系清楚，颜色不是平均铺满。</p><span>20%</span></div>
+              <div><b>03</b><h4>镜头连续</h4><p>同场景在曝光、白点、肤色与节奏上形成可信序列。</p><span>20%</span></div>
+              <div><b>04</b><h4>风格适配</h4><p>Look 服务题材与情绪，克制且有一致的方向。</p><span>20%</span></div>
+              <div><b>05</b><h4>可复现性</h4><p>节点、版本、参数、输出设置记录完整，另一人能重建。</p><span>20%</span></div>
+            </div>
+          </div>
+
+          <div class="critique-loop reveal">
+            <span class="eyebrow">THE CRITIQUE LOOP</span>
+            <div><b>第一遍</b><p>只看感受：视线落在哪里？情绪是否成立？</p><i>→</i><b>第二遍</b><p>只看技术：黑位、高光、肤色、遮罩、连续性。</p><i>→</i><b>第三遍</b><p>播放全片：节奏、切换、疲劳与模式化。</p></div>
+          </div>
+        </section>
+
+        <section class="chapter" id="learn">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">07</span><span class="eyebrow">90-DAY ROADMAP / 90 天进阶路线</span></div>
+            <span class="time-chip">FROM TASTE TO TRANSFER</span>
+          </div>
+          <div class="learning-hero reveal">
+            <h2>把“学习调色”<br>变成一套可验证的工程。</h2>
+            <p>每个阶段不只是看课，而是用作品和记录证明你已经具备该阶段的能力。</p>
+          </div>
+
+          <div class="roadmap">
+            <article class="roadmap-card reveal">
+              <div class="roadmap-time">DAY 01–14</div><span>阶段一</span><h3>学会看</h3>
+              <ul><li>每天分析三张参考，写下六个观察词</li><li>练习眯眼判断明暗层级与视线</li><li>建立自己的视觉词表与参考库</li></ul>
+              <b>作品：14 份参考拆解卡</b>
+            </article>
+            <article class="roadmap-card reveal">
+              <div class="roadmap-time">DAY 15–35</div><span>阶段二</span><h3>学会复现</h3>
+              <ul><li>完成 5 个单帧复现</li><li>每个作品保留节点图和参数记录</li><li>从 1 个参考扩展到同场景 3 个镜头</li></ul>
+              <b>作品：5 组 Before / After / Nodes</b>
+            </article>
+            <article class="roadmap-card reveal">
+              <div class="roadmap-time">DAY 36–65</div><span>阶段三</span><h3>学会迁移</h3>
+              <ul><li>用自己的素材重做三个 Look</li><li>制作自然、冷峻、暖胶片三种变体</li><li>建立可复用的节点模板与版本说明</li></ul>
+              <b>作品：一组风格迁移实验</b>
+            </article>
+            <article class="roadmap-card reveal">
+              <div class="roadmap-time">DAY 66–90</div><span>阶段四</span><h3>学会交付</h3>
+              <ul><li>完成 30–60 秒完整段落</li><li>执行全片 QC、字幕安全区与输出验证</li><li>写一页技术复盘与限制声明</li></ul>
+              <b>作品：成片 + QC + 复盘</b>
+            </article>
+          </div>
+
+          <div class="practice-board reveal">
+            <div class="practice-head"><div><span class="eyebrow">WEEKLY PRACTICE</span><h3>每周必须完成的四个动作</h3></div><span id="practiceCount">0 / 8</span></div>
+            <div class="practice-grid">
+              <label><input type="checkbox" data-practice><span></span><b>01</b>收集 5 张参考并写下视觉事实</label>
+              <label><input type="checkbox" data-practice><span></span><b>02</b>完成 1 个单帧技术复现</label>
+              <label><input type="checkbox" data-practice><span></span><b>03</b>做 1 次同场景三镜匹配</label>
+              <label><input type="checkbox" data-practice><span></span><b>04</b>测试 1 个风格变体并写差异清单</label>
+              <label><input type="checkbox" data-practice><span></span><b>05</b>用另一条素材验证节点泛化</label>
+              <label><input type="checkbox" data-practice><span></span><b>06</b>旁路全部节点，检查技术链</label>
+              <label><input type="checkbox" data-practice><span></span><b>07</b>完成输出文件全片 QC</label>
+              <label><input type="checkbox" data-practice><span></span><b>08</b>写一段“为什么这样调”的复盘</label>
+            </div>
+          </div>
+
+          <div class="reference-library reveal">
+            <div class="library-head"><span class="eyebrow">REFERENCE LIBRARY / 参考方向</span><h3>看电影，也看光、色、构图与材质</h3></div>
+            <div class="reference-grid">
+              <article><span>01</span><h4>Roger Deakins</h4><p>研究光位、明暗层次与克制的色彩。观察人物如何从环境中被光线分离。</p><div class="ref-swatch"><i></i><i></i><i></i><i></i></div></article>
+              <article><span>02</span><h4>Hoyte van Hoytema</h4><p>研究大画幅、自然光与冷暖控制。关注空气感、高光与空间尺度。</p><div class="ref-swatch"><i></i><i></i><i></i><i></i></div></article>
+              <article><span>03</span><h4>Christopher Doyle</h4><p>研究颜色如何参与情绪与节奏。不要复制色相，先理解画面运动和叙事位置。</p><div class="ref-swatch"><i></i><i></i><i></i><i></i></div></article>
+              <article><span>04</span><h4>Painting &amp; Photography</h4><p>研究 Vermeer、Hopper 等作品的光线路径与视觉重量，再回到动态影像中观察它们如何变化。</p><div class="ref-swatch"><i></i><i></i><i></i><i></i></div></article>
+            </div>
+          </div>
+
+          <div class="glossary reveal">
+            <div class="glossary-head"><span class="eyebrow">ADVANCED GLOSSARY</span><h3>进阶词表</h3></div>
+            <dl>
+              <div><dt>Visual Hierarchy</dt><dd>通过明暗、颜色、清晰度、运动和构图决定观看顺序。</dd></div>
+              <div><dt>Color Script</dt><dd>从全片或全剧角度规划色彩与情绪的变化路径。</dd></div>
+              <div><dt>LMT</dt><dd>ACES 中承载创作 Look 的转换环节，与技术 IDT/ODT 分开。</dd></div>
+              <div><dt>Tone Mapping</dt><dd>把高动态范围亮度映射到目标显示能力的处理。</dd></div>
+              <div><dt>Gamut Mapping</dt><dd>把超出目标色域的颜色压回可显示范围的处理。</dd></div>
+              <div><dt>Subjective Match</dt><dd>以视觉关系而非逐像素一致为目标的镜头匹配。</dd></div>
+              <div><dt>Look Transfer</dt><dd>把风格逻辑迁移到新素材，而非复制单张参考。</dd></div>
+              <div><dt>Texture Pass</dt><dd>在色彩关系完成后添加颗粒、光晕、Bloom 等质感。</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="chapter" id="debug">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">08</span><span class="eyebrow">REPRODUCTION TROUBLESHOOT / 复现故障手册</span></div>
+            <span class="time-chip">COMPARE · ISOLATE · GENERALIZE</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>像但又不对，<br>先找“哪一层不像”。</h2>
+            <div><p class="lead">复现失败通常不是缺少某个 LUT，而是参考与目标处于不同的观看条件，或把光、材质、内容和调色混为一谈。用差异层级来定位。</p></div>
+          </div>
+          <div class="debug-table">
+            <div class="debug-row head"><span>症状</span><span>优先怀疑</span><span>最小验证</span><span>处理</span></div>
+            <div class="debug-row"><span>整体就是“不像”</span><span>显示条件 / 内容差异</span><span>同屏、同亮度、同色彩标签比较</span><span>先统一观看端，再拆解技术差异</span></div>
+            <div class="debug-row"><span>亮度对了但层次不对</span><span>对比曲线 / Pivot</span><span>眯眼比较黑白块与中间调</span><span>调整 Pivot、滚降与局部对比</span></div>
+            <div class="debug-row"><span>颜色接近但空间塌</span><span>主辅色 / 饱和度分布</span><span>只保留大色块比较</span><span>降低背景竞争，重建冷暖或色相分离</span></div>
+            <div class="debug-row"><span>肤色很脏</span><span>混合色 / 色相压缩</span><span>切换 Matte，查看肤色区域与环境反射</span><span>修白点，限制绿色偏移，保护高光</span></div>
+            <div class="debug-row"><span>单帧很像，连续播放跳</span><span>缺少 Hero 和镜头连续策略</span><span>三镜循环播放</span><span>统一黑位、白点、肤色与风格强度</span></div>
+            <div class="debug-row"><span>换素材就失效</span><span>过拟合 / 节点逻辑不泛化</span><span>用不同光线的新素材测试</span><span>把风格拆成可调参数与相对关系</span></div>
+            <div class="debug-row"><span>质感像塑料</span><span>Halation / Grain / 高频处理</span><span>100% 局部看高光与微反差</span><span>降低全局处理，按镜头和分辨率调整</span></div>
+            <div class="debug-row"><span>输出后又不像</span><span>输出变换 / 编码 / 标签</span><span>回读实际输出文件比较</span><span>修复显示变换与交付规格，不只信 Viewer</span></div>
+          </div>
+          <div class="debug-rule reveal"><span>RULE OF THREE</span><p>至少用三张不同的参考画面、三条自己的素材和一个实际输出文件来验证风格。单张像，不代表方法成立。</p></div>
+        </section>
+
+        <section class="chapter quiz-section" id="quiz">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">CRITIQUE</span><span class="eyebrow">FINAL CHECK / 三题复盘</span></div>
+            <span class="time-chip">THINK LIKE A COLORIST</span>
+          </div>
+          <div class="quiz-layout">
+            <div class="quiz-intro reveal">
+              <h2>你能把感受<br>变成可执行判断吗？</h2>
+              <p>每题只有一个更专业的选择。答完立即看到解释。</p>
+              <div class="quiz-score"><span id="quizScore">0</span><small>/ 3 CORRECT</small></div>
+            </div>
+            <div class="quiz-list">
+              <article class="quiz-card reveal" data-answer="b"><span class="quiz-no">Q1 / AESTHETIC</span><h3>客户说画面“不够高级”，最合理的下一步是？</h3><div class="quiz-options"><button type="button" data-choice="a"><i>A</i>立刻加青橙和胶片颗粒</button><button type="button" data-choice="b"><i>B</i>请对方指出视线、层次、颜色或质感的哪一项目标未达成</button><button type="button" data-choice="c"><i>C</i>把饱和度降到底</button></div><p class="quiz-feedback">“高级”不是可执行参数。将模糊反馈转成视觉事实和参考，是审美沟通与技术执行之间最重要的一步。</p></article>
+              <article class="quiz-card reveal" data-answer="c"><span class="quiz-no">Q2 / REPRODUCTION</span><h3>单帧复现很像，但同场景下一镜头完全失效，说明什么？</h3><div class="quiz-options"><button type="button" data-choice="a"><i>A</i>再给每个镜头套一遍同一个 LUT</button><button type="button" data-choice="b"><i>B</i>说明风格越固定越好</button><button type="button" data-choice="c"><i>C</i>复现可能过拟合参考，需要检验逻辑能否泛化</button></div><p class="quiz-feedback">真正可复现的是相对关系与调整策略，不是某张截图上的像素结果。用不同素材测试，才能验证风格逻辑。</p></article>
+              <article class="quiz-card reveal" data-answer="a"><span class="quiz-no">Q3 / WORKFLOW</span><h3>复现参考时，哪条顺序最合理？</h3><div class="quiz-options"><button type="button" data-choice="a"><i>A</i>统一观看条件 → 明暗与对比 → 色彩关系 → 局部 → 质感</button><button type="button" data-choice="b"><i>B</i>颗粒 → 饱和度 → 色彩管理 → 曝光</button><button type="button" data-choice="c"><i>C</i>先套 LUT，再根据感觉添加所有工具</button></div><p class="quiz-feedback">观看条件先统一，技术转换先正确，再处理大关系、局部和质感。这个顺序让每个差异都可定位、可复盘。</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="closing reveal">
+          <span class="eyebrow">SEE BETTER · REPEAT SMARTER</span>
+          <h2>审美的终点不是“像谁”，<br>是知道<em>为什么这样。</em></h2>
+          <p>参考提供方向，技术提供路径。把每次复现都变成可解释、可迁移、可验证的作品。</p>
+          <div class="closing-actions"><a class="button button-primary" href="#top">回到顶部 ↑</a><button class="button button-ghost" id="printButtonBottom" type="button">导出 PDF</button></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div><span class="brand-mark small">C<span>2</span></span><p>Color Lab 02<br>调色进阶与审美训练 · 2026.10</p></div>
+    <p class="footer-note">离线可用 · 不依赖外部字体与图片<br>快捷键：按 <kbd>P</kbd> 打印，按 <kbd>Esc</kbd> 关闭菜单</p>
+    <a href="#top">BACK TO TOP ↑</a>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">已保存</div>
+  <script src="script.js"></script>
+</body>
+</html>

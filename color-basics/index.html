@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="全面、专业、可实践的 DaVinci Resolve 达芬奇调色学习网站，包含思维导图、色彩管理、节点、实战工作流与交付。">
+  <title>COLOR ATLAS · 达芬奇调色深度学习手册</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div class="reading-progress" aria-hidden="true"><span id="readingBar"></span></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark">C<span>/</span>A</span>
+      <span class="brand-copy">Color Atlas<br><b>达芬奇调色手册</b></span>
+    </a>
+    <nav class="top-nav" aria-label="主导航">
+      <a href="#map">图谱</a>
+      <a href="#science">原理</a>
+      <a href="#management">色彩管理</a>
+      <a href="#nodes">节点</a>
+      <a href="#workflow">实战</a>
+      <a href="#learn">学习</a>
+    </nav>
+    <button class="icon-button" id="printButton" type="button" aria-label="打印或导出为 PDF" title="打印 / 导出 PDF">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg>
+    </button>
+    <button class="menu-button" id="menuButton" type="button" aria-label="打开目录" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <span class="eyebrow">COLOR INDEX / 调色目录</span>
+    <a href="#role">00 / 建立判断</a>
+    <a href="#map">01 / 交互思维导图</a>
+    <a href="#science">02 / 色彩科学</a>
+    <a href="#management">03 / 色彩管理</a>
+    <a href="#tools">04 / 调色工具</a>
+    <a href="#nodes">05 / 节点架构</a>
+    <a href="#workflow">06 / 实战工作流</a>
+    <a href="#looks">07 / 风格与质感</a>
+    <a href="#delivery">08 / 交付质检</a>
+    <a href="#learn">09 / 学习路线</a>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <div class="eyebrow reveal">DAVINCI RESOLVE · COLOR LEARNING SYSTEM</div>
+        <h1 class="reveal">把画面调成<br><em>一种判断。</em></h1>
+        <p class="hero-lede">从色轮、示波器与色彩管理，走到镜头匹配、局部塑形、胶片质感与最终交付。不是插件菜单大全，而是一套能解释、能复现、能验收的调色方法。</p>
+        <div class="hero-actions reveal">
+          <a class="button button-primary" href="#map">打开调色图谱 <span>↓</span></a>
+          <a class="button button-ghost" href="#workflow">进入实战工作流</a>
+        </div>
+        <div class="hero-meta reveal">
+          <div><strong>08</strong><span>核心知识域</span></div>
+          <div><strong>30</strong><span>天练习路线</span></div>
+          <div><strong>01</strong><span>正确的输出转换</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="visual-topline">
+          <span>RESOLVE / COLOR PAGE</span>
+          <span class="live-dot">GRADE</span>
+        </div>
+        <div class="viewer-shell">
+          <canvas id="gradeCanvas" width="720" height="470" aria-label="原始画面与完成调色画面的连续对比"></canvas>
+          <div class="viewer-label left-label">SOURCE / BALANCED</div>
+          <div class="viewer-label right-label">FINAL / LOOK</div>
+          <div class="viewer-cross"></div>
+        </div>
+        <div class="mini-node-graph" aria-hidden="true">
+          <span class="mini-node n1">01</span><i></i>
+          <span class="mini-node n2">02</span><i></i>
+          <span class="mini-node n3">03</span><i></i>
+          <span class="mini-node n4">04</span>
+        </div>
+        <div class="hero-control">
+          <div>
+            <label for="gradeSlider">拖动查看平衡与风格</label>
+            <span id="gradeState">LOOK 58% · 中性平衡</span>
+          </div>
+          <input id="gradeSlider" type="range" min="0" max="100" value="58" aria-label="原始与完成调色对比">
+        </div>
+      </div>
+
+      <div class="hero-index" aria-hidden="true">SCOPE / MATCH<br>LOOK / DELIVER</div>
+    </section>
+
+    <div class="page-shell">
+      <aside class="side-rail" aria-label="章节目录">
+        <div class="rail-sticky">
+          <p class="rail-label">COLOR INDEX</p>
+          <nav id="railNav">
+            <a href="#role"><span>00</span>建立判断</a>
+            <a href="#map"><span>01</span>思维导图</a>
+            <a href="#science"><span>02</span>色彩科学</a>
+            <a href="#management"><span>03</span>色彩管理</a>
+            <a href="#tools"><span>04</span>调色工具</a>
+            <a href="#nodes"><span>05</span>节点架构</a>
+            <a href="#workflow"><span>06</span>实战工作流</a>
+            <a href="#looks"><span>07</span>风格与质感</a>
+            <a href="#delivery"><span>08</span>交付质检</a>
+            <a href="#learn"><span>09</span>学习路线</a>
+          </nav>
+          <div class="rail-note">
+            <span class="status-light"></span>
+            <p>先让画面正确，<br>再让它有性格。</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="chapter" id="role">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">00</span><span class="eyebrow">JUDGEMENT / 建立调色判断</span></div>
+            <span class="time-chip">FOUNDATION · 先看关系</span>
+          </div>
+          <div class="intro-grid">
+            <div class="intro-heading reveal">
+              <h2>调色不是给画面加滤镜，<br>是控制注意力与意义。</h2>
+            </div>
+            <div class="intro-copy reveal">
+              <p>观众不会先看到你的节点，而会先感受到光线、肤色、空间和情绪。一个好的镜头要回答：第一眼应该看哪里？哪里像白？前后景如何分离？颜色在叙事里承担什么？</p>
+              <blockquote>调色顺序的核心不是软件按钮，而是从“技术正确”到“感知平衡”，再到“镜头关系”与“创作表达”的逐层收敛。</blockquote>
+            </div>
+          </div>
+
+          <div class="level-stack reveal">
+            <article class="level-card l1"><span>LEVEL 01</span><h3>技术正确</h3><p>色彩空间、Gamma、数据范围、位深、交付转换正确。画面没有黑位裁切、色域误解或重复转换。</p><b>可量化</b></article>
+            <article class="level-card l2"><span>LEVEL 02</span><h3>感知平衡</h3><p>曝光、对比、白平衡与饱和度形成自然、可信的观看起点，眼睛有明确的落点。</p><b>可观察</b></article>
+            <article class="level-card l3"><span>LEVEL 03</span><h3>镜头关系</h3><p>同一场景的镜头在明暗、色温、肤色、空间感和连续性上彼此匹配，剪辑不跳。</p><b>可比较</b></article>
+            <article class="level-card l4"><span>LEVEL 04</span><h3>创作表达</h3><p>色彩与叙事一致。风格服务题材、人物与情绪，而不是盖住原片的信息和质感。</p><b>可感受</b></article>
+          </div>
+
+          <div class="definition-strip reveal">
+            <span class="eyebrow">THE PRIMARY QUESTION</span>
+            <p><strong>“我为什么要动这个参数？”</strong> 为了恢复信息、统一接戏、突出主体、分离空间，还是建立情绪？如果答不出来，先关掉节点，重新看画面。</p>
+          </div>
+
+          <div class="principle-grid">
+            <article class="principle-card reveal"><span>01</span><h4>先补偿，再创作</h4><p>先校正拍摄变化与色彩管理，再决定 Contrast、Split Tone 和 Film Look。不要把技术问题藏在风格里。</p></article>
+            <article class="principle-card reveal"><span>02</span><h4>一个节点一件事</h4><p>曝光、白平衡、Look、局部塑形分开控制。故障时可单独 Bypass，改版本时不至于拆掉整条链。</p></article>
+            <article class="principle-card reveal"><span>03</span><h4>示波器与眼睛并用</h4><p>示波器保证不越界、不偏色；眼睛判断画面是否有层次、肤色与情绪。两者不是替代关系。</p></article>
+            <article class="principle-card reveal"><span>04</span><h4>始终比较镜头</h4><p>单镜头漂亮不代表场景成立。建立 Hero Shot，再让其他镜头向它靠近，而不是每张图各自“出片”。</p></article>
+          </div>
+        </section>
+
+        <section class="chapter" id="map">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">01</span><span class="eyebrow">INTERACTIVE MIND MAP / 调色知识图谱</span></div>
+            <button class="reset-button" id="downloadMindMap" type="button">下载 SVG 导图</button>
+          </div>
+          <div class="chapter-title-row reveal">
+            <h2>一张图看见调色的全部边界</h2>
+            <p>点击任意分支查看该知识域的核心问题、学习重点与实战出口。导图既能纵览全局，也能作为项目复盘的检查框架。</p>
+          </div>
+
+          <div class="mind-layout reveal">
+            <div class="mind-map-scroll">
+              <svg id="mindMap" class="mind-map" viewBox="0 0 1000 700" role="img" aria-labelledby="mindMapTitle mindMapDesc">
+                <title id="mindMapTitle">达芬奇调色学习思维导图</title>
+                <desc id="mindMapDesc">中心为达芬奇调色，分为色彩科学、色彩管理、调色工具、节点架构、镜头匹配、风格创造、交付质检和学习路线八个分支。</desc>
+                <defs>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+                <g class="map-paths">
+                  <path d="M424 335 C330 335 280 130 190 130"/>
+                  <path d="M424 342 C310 342 300 280 190 280"/>
+                  <path d="M430 360 C300 360 290 440 190 440"/>
+                  <path d="M440 380 C360 380 310 570 190 570"/>
+                  <path d="M576 335 C670 335 710 130 810 130"/>
+                  <path d="M576 342 C690 342 700 280 810 280"/>
+                  <path d="M570 360 C690 360 710 440 810 440"/>
+                  <path d="M560 380 C640 380 690 570 810 570"/>
+                </g>
+
+                <g class="mind-branch" data-mind="science" tabindex="0" role="button" aria-label="色彩科学">
+                  <rect x="42" y="94" width="202" height="72" rx="2"/>
+                  <circle cx="66" cy="118" r="7"/>
+                  <text class="mind-num" x="62" y="121">01</text>
+                  <text class="mind-title" x="84" y="118">色彩科学</text>
+                  <text class="mind-sub" x="84" y="142">光、眼睛、显示、示波器</text>
+                </g>
+                <g class="mind-branch" data-mind="management" tabindex="0" role="button" aria-label="色彩管理">
+                  <rect x="42" y="244" width="202" height="72" rx="2"/>
+                  <circle cx="66" cy="268" r="7"/>
+                  <text class="mind-num" x="62" y="271">02</text>
+                  <text class="mind-title" x="84" y="268">色彩管理</text>
+                  <text class="mind-sub" x="84" y="292">空间、变换、ACES</text>
+                </g>
+                <g class="mind-branch" data-mind="tools" tabindex="0" role="button" aria-label="调色工具">
+                  <rect x="42" y="404" width="202" height="72" rx="2"/>
+                  <circle cx="66" cy="428" r="7"/>
+                  <text class="mind-num" x="62" y="431">03</text>
+                  <text class="mind-title" x="84" y="428">调色工具</text>
+                  <text class="mind-sub" x="84" y="452">轮、曲线、限定器、窗口</text>
+                </g>
+                <g class="mind-branch" data-mind="nodes" tabindex="0" role="button" aria-label="节点架构">
+                  <rect x="42" y="534" width="202" height="72" rx="2"/>
+                  <circle cx="66" cy="558" r="7"/>
+                  <text class="mind-num" x="62" y="561">04</text>
+                  <text class="mind-title" x="84" y="558">节点架构</text>
+                  <text class="mind-sub" x="84" y="582">串联、并行、图层、Key</text>
+                </g>
+                <g class="mind-branch" data-mind="match" tabindex="0" role="button" aria-label="镜头匹配">
+                  <rect x="756" y="94" width="202" height="72" rx="2"/>
+                  <circle cx="780" cy="118" r="7"/>
+                  <text class="mind-num" x="776" y="121">05</text>
+                  <text class="mind-title" x="798" y="118">镜头匹配</text>
+                  <text class="mind-sub" x="798" y="142">Hero、连续性、肤色</text>
+                </g>
+                <g class="mind-branch" data-mind="look" tabindex="0" role="button" aria-label="风格创造">
+                  <rect x="756" y="244" width="202" height="72" rx="2"/>
+                  <circle cx="780" cy="268" r="7"/>
+                  <text class="mind-num" x="776" y="271">06</text>
+                  <text class="mind-title" x="798" y="268">风格创造</text>
+                  <text class="mind-sub" x="798" y="292">对比、色相、质感</text>
+                </g>
+                <g class="mind-branch" data-mind="delivery" tabindex="0" role="button" aria-label="交付质检">
+                  <rect x="756" y="404" width="202" height="72" rx="2"/>
+                  <circle cx="780" cy="428" r="7"/>
+                  <text class="mind-num" x="776" y="431">07</text>
+                  <text class="mind-title" x="798" y="428">交付质检</text>
+                  <text class="mind-sub" x="798" y="452">输出变换、编码、QC</text>
+                </g>
+                <g class="mind-branch" data-mind="learn" tabindex="0" role="button" aria-label="学习路线">
+                  <rect x="756" y="534" width="202" height="72" rx="2"/>
+                  <circle cx="780" cy="558" r="7"/>
+                  <text class="mind-num" x="776" y="561">08</text>
+                  <text class="mind-title" x="798" y="558">学习路线</text>
+                  <text class="mind-sub" x="798" y="582">观察、复现、创作、交付</text>
+                </g>
+
+                <g class="mind-center" filter="url(#glow)">
+                  <rect x="408" y="298" width="184" height="116" rx="58"/>
+                  <text x="500" y="344">达芬奇调色</text>
+                  <text class="center-sub" x="500" y="370">COLOR SYSTEM</text>
+                  <text class="center-sub" x="500" y="390">点击分支展开</text>
+                </g>
+              </svg>
+            </div>
+            <aside class="mind-detail" id="mindDetail" aria-live="polite">
+              <span class="eyebrow" id="mindKicker">MAP / START HERE</span>
+              <h3 id="mindTitle">先建立完整地图</h3>
+              <p id="mindText">调色学习最容易陷入“工具越多越专业”的误区。真正的能力来自对画面关系的判断：技术正确、感知平衡、镜头匹配和风格表达。</p>
+              <div class="mind-keywords" id="mindKeywords"><span>技术正确</span><span>感知平衡</span><span>镜头关系</span><span>创作表达</span></div>
+              <a class="mind-link" id="mindLink" href="#science">从色彩科学开始 ↓</a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="chapter chapter-dark" id="science">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">02</span><span class="eyebrow">COLOR SCIENCE / 色彩与观察基础</span></div>
+            <span class="time-chip">WHY · 看懂工具在改什么</span>
+          </div>
+          <div class="dark-title reveal">
+            <h2>颜色不是像素属性，<br>是光、材料、眼睛和解释的共同结果。</h2>
+            <p>调色软件处理的是数字编码，观众看到的是经过监视器或屏幕重建的光。理解场景参考、显示参考、编码曲线和色域边界，才不会把“画面偏灰”误判成“素材坏了”。</p>
+          </div>
+
+          <div class="science-flow reveal">
+            <div class="science-node"><span>01</span><b>Light</b><small>光谱与照度</small></div>
+            <i></i>
+            <div class="science-node"><span>02</span><b>Camera</b><small>传感器与编码</small></div>
+            <i></i>
+            <div class="science-node"><span>03</span><b>Grade</b><small>关系与意图</small></div>
+            <i></i>
+            <div class="science-node"><span>04</span><b>Display</b><small>亮度与色域</small></div>
+            <i></i>
+            <div class="science-node"><span>05</span><b>Perception</b><small>对比与记忆色</small></div>
+          </div>
+
+          <div class="concept-grid">
+            <article class="concept-card reveal"><span>01</span><h3>Hue / Saturation / Value</h3><p>色相是颜色类别，饱和度是纯度，明度/亮度是强弱。三者在感知上相互影响：高亮色更容易显得低饱和，强背景会改变肤色观感。</p></article>
+            <article class="concept-card reveal"><span>02</span><h3>Scene / Display Referred</h3><p>场景参考描述拍摄现场的光；显示参考描述某块显示设备上的输出。RAW/Log 不是最终观看状态，必须经过正确的显示转换。</p></article>
+            <article class="concept-card reveal"><span>03</span><h3>Gamut / Gamma</h3><p>色域决定可表达的色相与饱和度边界，Gamma/传递函数描述编码与亮度之间的关系。两者不是同一个设置。</p></article>
+            <article class="concept-card reveal"><span>04</span><h3>Bit Depth / Precision</h3><p>位深影响可分辨的量化阶数。10-bit 比 8-bit 更耐拉、更少色带；浮点处理有利于高动态范围和反复运算。</p></article>
+            <article class="concept-card reveal"><span>05</span><h3>Memory Color</h3><p>人眼对肤色、天空、草地与中性灰有记忆。它们不必数值相等，但必须看起来“可信”。肤色尤其不能被简单当作固定 RGB 数值。</p></article>
+            <article class="concept-card reveal"><span>06</span><h3>Simultaneous Contrast</h3><p>同一块颜色放在不同背景中会显得不同。判断肤色与饱和度时，要看周围环境、镜头连续性和观看环境，而不是孤立盯一个像素。</p></article>
+          </div>
+
+          <div class="scope-lab reveal">
+            <div class="scope-title">
+              <div><span class="eyebrow">SCOPE READING / 示波器</span><h3>波形看亮度，矢量看关系。</h3></div>
+              <span class="diagram-hint">示意图，不对应特定素材</span>
+            </div>
+            <div class="scope-grid">
+              <div class="scope-card">
+                <span class="scope-label">WAVEFORM</span>
+                <canvas id="scienceWave" width="420" height="190" aria-label="亮度波形示意图"></canvas>
+                <p><b>亮度波形：</b>观察黑位、高光与中间调的分布；不是越铺满越好。</p>
+              </div>
+              <div class="scope-card">
+                <span class="scope-label">RGB PARADE</span>
+                <canvas id="scienceParade" width="420" height="190" aria-label="RGB 分量波形示意图"></canvas>
+                <p><b>RGB Parade：</b>比较 R/G/B 的黑白位与中间段，判断中性灰与偏色。</p>
+              </div>
+              <div class="scope-card vector-card">
+                <span class="scope-label">VECTORSCOPE</span>
+                <canvas id="scienceVector" width="300" height="250" aria-label="矢量示波器示意图"></canvas>
+                <p><b>Vectorscope：</b>观察色相方向与饱和度强度；肤色线只是参考，不是硬性目标。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="formula-note reveal">
+            <span>READ THIS</span>
+            <p>波形和矢量图读的是信号关系。示波器设置、数据范围、时间线色彩空间与参考级别都会改变读数。调色前先确认项目色彩管理，再用示波器辅助判断。</p>
+          </div>
+        </section>
+
+        <section class="chapter" id="management">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">03</span><span class="eyebrow">COLOR MANAGEMENT / 项目色彩管理</span></div>
+            <span class="time-chip">FOUNDATION · 一次正确的解释</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>调色前，先回答<br>“这个数是什么颜色？”</h2>
+            <div>
+              <p class="lead">如果输入、工作与显示空间不清楚，所有 Lift、Gamma、Gain 与 LUT 都可能建立在错误解释上。色彩管理的任务，是让每个像素从拍摄到观看有明确、唯一的转换路径。</p>
+              <p class="warning-inline"><b>最常见错误：</b>输入转换、Look LUT、输出转换重复套用，导致对比被二次压缩、黑色漂浮或肤色过黄。</p>
+            </div>
+          </div>
+
+          <div class="cm-pipeline reveal">
+            <div class="cm-node source"><span>INPUT</span><b>Camera / Media</b><small>S-Log3 · ARRIRAW · BRAW · Rec.709</small></div>
+            <div class="cm-connector">IDT / Input CST</div>
+            <div class="cm-node working"><span>WORKING</span><b>Timeline Space</b><small>DaVinci WG / Intermediate · ACEScct</small></div>
+            <div class="cm-connector">Grade</div>
+            <div class="cm-node working"><span>LOOK</span><b>Creative Path</b><small>Balance · Match · Look · Texture</small></div>
+            <div class="cm-connector">ODT / Output CST</div>
+            <div class="cm-node output"><span>OUTPUT</span><b>Display / Delivery</b><small>Rec.709 Gamma 2.4 · P3 · HDR PQ</small></div>
+          </div>
+
+          <div class="mode-comparison">
+            <article class="mode-card reveal"><span class="mode-code">A</span><h3>DaVinci YRGB</h3><p>处理更直接，适合已有明确节点变换的流程。输入、时间线、输出需要你主动管理，容易灵活，也更容易重复转换。</p><div class="tag-row"><span>Manual</span><span>Flexible</span><span>Need discipline</span></div></article>
+            <article class="mode-card reveal featured"><span class="mode-code">B</span><h3>DaVinci YRGB Color Managed</h3><p>由 Resolve 根据输入媒体、时间线与输出显示自动处理转换和映射。适合大多数现代项目，但仍要确认媒体识别与输出设置。</p><div class="tag-row"><span>Managed</span><span>Practical</span><span>Set once</span></div></article>
+            <article class="mode-card reveal"><span class="mode-code">C</span><h3>ACES</h3><p>使用 ACES 场景参考与 ACEScct 工作空间，适合跨相机、VFX 与多交付链路。需要理解 IDT、LMT、ODT 与版本。</p><div class="tag-row"><span>Scene-referred</span><span>Interchange</span><span>Technical</span></div></article>
+          </div>
+
+          <div class="management-rules reveal">
+            <div class="rules-title"><span class="eyebrow">NON-NEGOTIABLE RULES</span><h3>色彩管理六条底线</h3></div>
+            <ol>
+              <li><b>识别媒体：</b>确认每个源片段实际使用的相机色彩空间和 Gamma。</li>
+              <li><b>一次输入：</b>只需要一次从源空间到工作空间的转换。</li>
+              <li><b>一次输出：</b>输出变换只应用一次，避免节点与项目设置重复处理。</li>
+              <li><b>匹配观看端：</b>显示变换必须与监视器、亮度和色域一致。</li>
+              <li><b>冻结版本：</b>LUT、CDL、项目设置与 Resolve 版本进入交付记录。</li>
+              <li><b>分开技术/创作：</b>色彩空间变换与 Look 放在不同节点，方便诊断与迁移。</li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="chapter chapter-dark" id="tools">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">04</span><span class="eyebrow">TOOLKIT / Color Page 工具箱</span></div>
+            <span class="time-chip">RESOLVE · 工具服务于问题</span>
+          </div>
+          <div class="dark-title reveal">
+            <h2>不是哪个工具强，<br>而是哪个工具适合这个问题。</h2>
+            <p>色轮负责整体关系，曲线负责分布与色相映射，限定器负责选择像素，窗口负责选择空间，跟踪器让局部调整跟随运动。每个工具都是一种约束。</p>
+          </div>
+
+          <div class="page-strip reveal">
+            <div><span>01</span><b>Media</b><small>整理与元数据</small></div>
+            <div><span>02</span><b>Cut</b><small>快速组织</small></div>
+            <div><span>03</span><b>Edit</b><small>剪辑与回套</small></div>
+            <div><span>04</span><b>Fusion</b><small>合成与动态</small></div>
+            <div class="active"><span>05</span><b>Color</b><small>色彩与塑形</small></div>
+            <div><span>06</span><b>Fairlight</b><small>声音</small></div>
+            <div><span>07</span><b>Deliver</b><small>编码与输出</small></div>
+          </div>
+
+          <div class="tool-matrix">
+            <article class="tool-card reveal"><span>01 / PRIMARY</span><h3>色轮与全局关系</h3><p><b>Lift / Gamma / Gain</b> 分布调整暗部、中间调与高光；<b>Offset</b> 更均匀地推移整体。先用它们建立曝光、白平衡与色调基底。</p><code>Shadow · Midtone · Highlight</code></article>
+            <article class="tool-card reveal"><span>02 / CURVES</span><h3>用分布而不是猜数值</h3><p>Custom 曲线控制亮度与通道；Hue vs Hue/Sat/Lum 精确调整某段色彩关系。曲线形状应能解释，不要随机打点。</p><code>Luma · Hue · Saturation</code></article>
+            <article class="tool-card reveal"><span>03 / QUALIFIER</span><h3>选择颜色相似区域</h3><p>HSL 限定器配合 Matte Finesse、Clean Black/White 与 Toggle Matte 检查选区。范围一旦过大，肤色和背景会一起被带走。</p><code>Hue · Saturation · Luminance</code></article>
+            <article class="tool-card reveal"><span>04 / WINDOW</span><h3>选择空间区域</h3><p>Power Window 做局部光线、天空、脸部与空间引导。羽化、反向、柔化与跟踪决定它是否自然。</p><code>Shape · Feather · Track</code></article>
+            <article class="tool-card reveal"><span>05 / WARP</span><h3>改变色彩拓扑</h3><p>Color Warper 适合重新定位一组颜色、修正混合色或做风格化分离。它解决的是色彩位置关系，不只是整体偏色。</p><code>Hue × Saturation lattice</code></article>
+            <article class="tool-card reveal"><span>06 / MASK</span><h3>比追踪更聪明的选区</h3><p>Magic Mask、深度图与对象遮罩适合复杂运动，但必须检查边界、遮挡与运动模糊。自动工具提高效率，不替代 QC。</p><code>Object · Person · Depth</code></article>
+          </div>
+
+          <div class="image-notes reveal">
+            <div><span class="eyebrow">TOOL ORDER / 一个小原则</span><h3>先全局，后局部，最后质感</h3></div>
+            <ul>
+              <li><b>全局：</b>曝光、对比、白平衡、整体饱和度。</li>
+              <li><b>关系：</b>肤色与环境分离、前后景层次、关键色。</li>
+              <li><b>局部：</b>窗口、面部、天空、实用光与视线引导。</li>
+              <li><b>质感：</b>Film Grain、Halation、Bloom、Gate Weave。</li>
+              <li><b>交付：</b>最后检查输出变换与编码，不在末端补偿前面的错误。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="chapter" id="nodes">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">05</span><span class="eyebrow">NODE ARCHITECTURE / 节点不是装饰</span></div>
+            <span class="time-chip">SYSTEM · 每一步可解释</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>好的节点图，<br>是能拆开检查的思路。</h2>
+            <div><p class="lead">节点让每个操作独立、可复用、可旁路。节点越多不代表越专业；真正专业的是命名清楚、职责单一、信号流正确，并且能准确解释第 4 个节点为什么存在。</p></div>
+          </div>
+
+          <div class="node-types reveal">
+            <article><span>01</span><h4>Serial 串联</h4><p>前一个节点的结果进入后一个节点，适合连续校正和递进风格。</p><div class="mini-chain"><i>A</i><b>→</b><i>B</i><b>→</b><i>C</i></div></article>
+            <article><span>02</span><h4>Parallel 并行</h4><p>多个节点从同一输入出发，经 Layer Mixer 合成，适合比较或混合 Look。</p><div class="mini-chain parallel"><i>A</i><b>╲</b><i>B</i><b>╱</b><i>Mix</i></div></article>
+            <article><span>03</span><h4>Layer 图层</h4><p>使用 Alpha/Key 把前景结果叠在背景上，适合局部颜色与质感。</p><div class="mini-chain"><i>BG</i><b>+</b><i>FG</i><b>=</b><i>Mix</i></div></article>
+            <article><span>04</span><h4>Key Mixer</h4><p>组合多个 Key，改进遮罩的覆盖与排除关系。优先检查 Matte，不要先修饰。</p><div class="mini-chain"><i>K1</i><b>+</b><i>K2</i><b>→</b><i>Key</i></div></article>
+          </div>
+
+          <div class="recipe-lab reveal">
+            <div class="recipe-head">
+              <div><span class="eyebrow">NODE RECIPES / 可执行模板</span><h3>三种从简单到复杂的结构</h3></div>
+              <div class="tab-controls" role="tablist" aria-label="节点模板">
+                <button type="button" role="tab" aria-selected="true" data-tab="recipe-base">基础匹配</button>
+                <button type="button" role="tab" aria-selected="false" data-tab="recipe-local">局部塑形</button>
+                <button type="button" role="tab" aria-selected="false" data-tab="recipe-film">Film Finish</button>
+              </div>
+            </div>
+            <div class="recipe-panels">
+              <div class="recipe-panel active" data-panel="recipe-base">
+                <div class="graph-canvas">
+                  <span class="graph-node">01<br><small>INPUT / CM</small></span><i>→</i>
+                  <span class="graph-node">02<br><small>BALANCE</small></span><i>→</i>
+                  <span class="graph-node">03<br><small>CONTRAST</small></span><i>→</i>
+                  <span class="graph-node">04<br><small>SKIN</small></span><i>→</i>
+                  <span class="graph-node accent">05<br><small>LOOK</small></span><i>→</i>
+                  <span class="graph-node">06<br><small>OUTPUT</small></span>
+                </div>
+                <div class="recipe-notes"><b>用途：</b><span>每镜相同的基础结构。先用 02 平衡曝光与白点，再用 03 决定层次；04 只保护肤色关系，05 才引入创作方向。</span></div>
+              </div>
+              <div class="recipe-panel" data-panel="recipe-local">
+                <div class="graph-canvas layered">
+                  <span class="graph-node">BASE</span><i>→</i>
+                  <span class="graph-node stack">02 FACE<br><small>Window + Track</small></span>
+                  <span class="graph-node stack">03 SKY<br><small>Qualifier</small></span>
+                  <span class="graph-node stack">04 BG<br><small>Window</small></span>
+                  <i>→</i><span class="graph-node accent">LAYER<br><small>MIXER</small></span><i>→</i><span class="graph-node">OUTPUT</span>
+                </div>
+                <div class="recipe-notes"><b>用途：</b><span>局部节点在同一输入上并行，各自只负责一个区域。用 Layer Mixer 控制贡献，不要把所有 Power Window 塞进一个节点。</span></div>
+              </div>
+              <div class="recipe-panel" data-panel="recipe-film">
+                <div class="graph-canvas">
+                  <span class="graph-node">01<br><small>BALANCE</small></span><i>→</i>
+                  <span class="graph-node">02<br><small>MATCH</small></span><i>→</i>
+                  <span class="graph-node accent">03<br><small>LOOK</small></span><i>→</i>
+                  <span class="graph-node">04<br><small>ROLLOFF</small></span><i>→</i>
+                  <span class="graph-node">05<br><small>HALATION</small></span><i>→</i>
+                  <span class="graph-node">06<br><small>GRAIN</small></span>
+                </div>
+                <div class="recipe-notes"><b>用途：</b><span>先完成色彩关系，再处理高光过渡、光晕与颗粒。质感节点放在 Look 后面，但输出变换仍要独立检查，避免颗粒影响技术限制判断。</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkpoint-contract reveal">
+            <span class="eyebrow">NODE HYGIENE</span>
+            <h3>交付前，节点图应该能被另一位调色师秒懂。</h3>
+            <div class="contract-chips"><span>命名职责</span><span>颜色标签一致</span><span>技术转换独立</span><span>版本可对比</span><span>旁路可诊断</span><span>无隐藏节点</span><span>无重复输出</span><span>节点缓存干净</span></div>
+          </div>
+        </section>
+
+        <section class="chapter" id="workflow">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">06</span><span class="eyebrow">GRADING WORKFLOW / 从项目到镜头</span></div>
+            <span class="time-chip">SIX PASSES · 顺序比速度重要</span>
+          </div>
+          <div class="chapter-title-row reveal">
+            <h2>先做全场，再做单镜；<br>先找 Hero，再复制。</h2>
+            <p>正确的工作流让你在 200 个镜头里保持一致。每次调整都要知道它属于哪一层，避免“局部越调越漂亮，全场越来越不接”。</p>
+          </div>
+
+          <div class="pass-board reveal">
+            <article><span>PASS 01</span><h3>Technical</h3><p>项目色彩管理、片段属性、回套、数据范围、帧率与时间线。</p><b>正确的信号</b></article>
+            <article><span>PASS 02</span><h3>Balance</h3><p>以 Hero Shot 为基准，校正曝光、对比、白点与整体色彩平衡。</p><b>可信的观看</b></article>
+            <article><span>PASS 03</span><h3>Match</h3><p>跨镜头统一黑位、高光、色温、饱和度与肤色关系。</p><b>连续的场景</b></article>
+            <article><span>PASS 04</span><h3>Shape</h3><p>窗口、限定器与跟踪建立主体引导、空间分离和局部光线。</p><b>有秩序的视线</b></article>
+            <article><span>PASS 05</span><h3>Look</h3><p>加入色彩故事、对比倾向和高光/阴影色相。</p><b>可识别的风格</b></article>
+            <article><span>PASS 06</span><h3>Finish</h3><p>Halation、Bloom、Grain、稳定、字幕安全区与技术 QC。</p><b>完成的质感</b></article>
+          </div>
+
+          <div class="match-lab reveal">
+            <div class="match-copy">
+              <span class="eyebrow">BALANCE LAB / 交互练习</span>
+              <h3>先不调风格，把画面调“可信”。</h3>
+              <p>下面的模拟器不替代 Resolve 的示波器，而是帮助你建立参数与画面的直觉：曝光推动整体，色温改变 R/B 平衡，色调改变 Green/Magenta 倾向。</p>
+              <div class="lab-controls">
+                <label for="exposureRange">曝光 <output id="exposureOut">0.00</output></label>
+                <input id="exposureRange" type="range" min="-1" max="1" step="0.05" value="0">
+                <label for="temperatureRange">色温 <output id="temperatureOut">0</output></label>
+                <input id="temperatureRange" type="range" min="-100" max="100" step="1" value="0">
+                <label for="tintRange">色调 <output id="tintOut">0</output></label>
+                <input id="tintRange" type="range" min="-100" max="100" step="1" value="0">
+                <button type="button" id="resetBalance" class="reset-button">复位到中性</button>
+              </div>
+            </div>
+            <div class="match-visual">
+              <canvas id="balanceCanvas" width="720" height="405" aria-label="曝光、色温和色调调整后的画面模拟"></canvas>
+              <div class="match-status"><span id="balanceState">NEUTRAL</span><span>SIMULATION · NOT A SCOPE</span></div>
+            </div>
+          </div>
+
+          <div class="workflow-rules">
+            <article class="rule-card reveal"><span>01</span><h4>选 Hero Shot</h4><p>选择场景里最具代表性、主体清晰、最容易建立观看基准的镜头。先把它调到满意，再匹配其他镜头。</p></article>
+            <article class="rule-card reveal"><span>02</span><h4>先统一黑与白</h4><p>用 RGB Parade 和波形比较黑位、白点和中间亮度。不要让所有镜头都“长一样”，要让剪辑点不跳。</p></article>
+            <article class="rule-card reveal"><span>03</span><h4>肤色最后看关系</h4><p>皮肤不应发灰、发绿或像独立贴在背景上。观察脸与环境的高光、阴影和色温是否属于同一光源。</p></article>
+            <article class="rule-card reveal"><span>04</span><h4>每次只动一个维度</h4><p>曝光、色温、对比、饱和度分别控制。一次改完四项，无法判断画面变好是因为哪一步。</p></article>
+            <article class="rule-card reveal"><span>05</span><h4>在全片上下文中检查</h4><p>切到相邻镜头、全屏播放，关注视线、运动与色彩节奏。单帧 Still 无法暴露闪烁和连续性错误。</p></article>
+            <article class="rule-card reveal"><span>06</span><h4>用版本管理表达</h4><p>技术修正、客户意见、风格实验与最终版分开保存。版本号、备注与时间比“final_final”可靠。</p></article>
+          </div>
+        </section>
+
+        <section class="chapter chapter-dark" id="looks">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">07</span><span class="eyebrow">LOOK DEVELOPMENT / 风格与质感</span></div>
+            <span class="time-chip">CREATIVE · 风格不是预设</span>
+          </div>
+          <div class="dark-title reveal">
+            <h2>风格是一组有意识的取舍，<br>不是把画面调到最重。</h2>
+            <p>颜色分离、高光滚降、阴影色相、对比曲线、Halation 与 Grain 都可以构成风格。关键是它们如何服务题材、人物和观看方式，并且在不同镜头间保持一致。</p>
+          </div>
+
+          <div class="look-anatomy reveal">
+            <div class="look-stack">
+              <div class="look-layer l1"><span>01</span><b>Foundation</b><small>曝光 · 白平衡 · 技术转换</small></div>
+              <div class="look-layer l2"><span>02</span><b>Color Relationship</b><small>肤色 · 环境色 · 冷暖分离</small></div>
+              <div class="look-layer l3"><span>03</span><b>Contrast Shape</b><small>黑位 · 高光滚降 · Pivot</small></div>
+              <div class="look-layer l4"><span>04</span><b>Texture</b><small>Halation · Bloom · Grain</small></div>
+            </div>
+            <div class="look-copy">
+              <h3>先决定“什么颜色出现在哪里”，再决定“有多浓”。</h3>
+              <p>很多 Look 看起来像滤镜，是因为只改了整体色偏，没有改变颜色之间的关系。真正有辨识度的风格通常包含：明确的主/辅色、面部保护、暗部倾向、高光品质和质感策略。</p>
+              <div class="look-check-grid">
+                <span>主体是否仍然清楚？</span><span>肤色是否有可信的生命感？</span>
+                <span>高光是否保留层次？</span><span>暗部是否仍有信息？</span>
+                <span>邻近镜头是否连续？</span><span>风格是否服务故事？</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="math-cards">
+            <article class="math-card reveal"><span>SKIN / 01</span><h4>保护面部的“关系”</h4><p>不用把所有肤色拉到同一 RGB 值。优先保持高光过渡、环境反射和肤色间的自然差异；用限定器时先看 Matte。</p></article>
+            <article class="math-card reveal"><span>SPACE / 02</span><h4>让前后景不靠“亮暗”分离</h4><p>主体与背景可以通过色相、饱和度、局部对比、光源颜色区分。空间感来自多层线索，不是单靠压暗背景。</p></article>
+            <article class="math-card reveal"><span>TEXTURE / 03</span><h4>质感要能解释</h4><p>Halation 模拟高光在胶片中的扩散，Grain 影响微结构。强度应随镜头、输出尺寸和观看平台调整，避免默认拉满。</p></article>
+          </div>
+
+          <div class="look-comparison reveal">
+            <div class="comparison-head"><span>STYLE DIRECTION</span><h3>同一条素材，不同的意图</h3></div>
+            <div class="look-cards">
+              <article><span>A</span><h4>克制自然</h4><p>保留中性色与柔和过渡，靠光线与构图建立情绪。适合写实、对白与人物戏。</p><div class="look-swatch swatch-natural"><i></i><i></i><i></i><i></i></div></article>
+              <article><span>B</span><h4>冷峻都市</h4><p>青色环境光、低饱和肤色、较硬黑位；用局部暖光保留人物生命力。</p><div class="look-swatch swatch-urban"><i></i><i></i><i></i><i></i></div></article>
+              <article><span>C</span><h4>暖色胶片</h4><p>柔和高光、暖黄实用光、轻微 Halation 与颗粒，适合回忆、年代和浪漫叙事。</p><div class="look-swatch swatch-film"><i></i><i></i><i></i><i></i></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="chapter" id="delivery">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">08</span><span class="eyebrow">DELIVERY / 输出、版本与技术 QC</span></div>
+            <span class="time-chip">FINAL · 输出只转换一次</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>监看对了，<br>不代表文件就对了。</h2>
+            <div><p class="lead">交付需要考虑目标色彩空间、显示 Gamma、编码、位深、数据/视频范围、帧率、音频、字幕和平台规格。一个漂亮的项目仍可能因为错误的输出变换或编码毁掉。</p></div>
+          </div>
+
+          <div class="delivery-pipeline reveal">
+            <div><span>01</span><b>MASTER</b><small>高质量母版 / 中间片</small></div>
+            <i>→</i>
+            <div><span>02</span><b>TRANSFORM</b><small>目标显示 / 色域</small></div>
+            <i>→</i>
+            <div><span>03</span><b>ENCODE</b><small>编码 / 位深 / 色度</small></div>
+            <i>→</i>
+            <div><span>04</span><b>QC</b><small>播放 / 字幕 / 音频 / 回套</small></div>
+          </div>
+
+          <div class="deliver-grid">
+            <article class="deliver-card reveal"><span>01 / MASTER</span><h3>先出可信母版</h3><p>母版应保留足够位深与画质，确保后续可以再转 SDR/HDR、平台版本或多语言字幕。不要在母版阶段就重度压缩。</p><code>ProRes / DNxHR / RGB or YUV</code></article>
+            <article class="deliver-card reveal"><span>02 / COLOR TAGS</span><h3>让文件自我解释</h3><p>确认输出色彩空间、Gamma、全范围/有限范围与目标平台读取方式。错误标签会让正确画面在别的软件里变灰或变黑。</p><code>Rec.709 · Gamma 2.4 · Video Range</code></article>
+            <article class="deliver-card reveal"><span>03 / REVIEW</span><h3>审片版要方便判断</h3><p>H.264/H.265 可选合适码率，并保留关键画面细节。平台压缩后重新检查高光、暗部、肤色与色带。</p><code>H.264 · H.265 · Web Preview</code></article>
+            <article class="deliver-card reveal"><span>04 / SIGN-OFF</span><h3>最后一定要播放</h3><p>从实际输出文件检查首尾、丢帧、黑帧、字幕安全区、响度、声道与色彩标签。不要只相信 Viewer 预览。</p><code>Playback QC · Report · Version</code></article>
+          </div>
+
+          <div class="qc-lab reveal">
+            <div class="qc-title"><span class="eyebrow">FINAL QC / 交付放行</span><h3>点完六项，才叫可以交。</h3></div>
+            <div class="qc-grid" id="qcGrid">
+              <button type="button" data-qc><i>01</i><span>色彩管理只做一次输入与输出转换</span><b>CHECK</b></button>
+              <button type="button" data-qc><i>02</i><span>输出空间、Gamma 与数据范围符合目标</span><b>CHECK</b></button>
+              <button type="button" data-qc><i>03</i><span>字幕、图形和安全区通过检查</span><b>CHECK</b></button>
+              <button type="button" data-qc><i>04</i><span>音频声道、电平与同步正确</span><b>CHECK</b></button>
+              <button type="button" data-qc><i>05</i><span>实际输出文件全片可播放、无丢帧</span><b>CHECK</b></button>
+              <button type="button" data-qc><i>06</i><span>项目、LUT、Still 与版本说明已归档</span><b>CHECK</b></button>
+            </div>
+            <div class="qc-bottom"><span id="qcCount">0 / 6</span><strong id="qcVerdict">WAITING FOR QC</strong></div>
+          </div>
+        </section>
+
+        <section class="chapter" id="learn">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">09</span><span class="eyebrow">LEARNING PATH / 30 天进阶路线</span></div>
+            <span class="time-chip">PRACTICE · 从观察走向交付</span>
+          </div>
+          <div class="learning-hero reveal">
+            <h2>不要追求一次调完。<br>要追求每次都知道为什么。</h2>
+            <p>四周分别训练判断、工具、关系和完成度。每一周都交付一个可检查的成果，而不是只看教程。</p>
+          </div>
+
+          <div class="week-roadmap">
+            <article class="week-card reveal">
+              <div class="week-no">W01</div><span>观察与基础</span>
+              <h3>看懂画面，认识信号</h3>
+              <ul><li>每天分析 3 张画面的主光、对比与色彩关系</li><li>认识波形、RGB Parade、矢量示波器</li><li>完成 8-bit / 10-bit 色带练习</li></ul>
+              <b>检查：能解释一个镜头为什么“看起来不自然”。</b>
+            </article>
+            <article class="week-card reveal">
+              <div class="week-no">W02</div><span>工具与节点</span>
+              <h3>建立可复现的基础链</h3>
+              <ul><li>只用色轮和曲线完成 10 个镜头的平衡</li><li>搭建 6 节点基础模板、3 种局部结构</li><li>练习限定器 Matte、窗口与跟踪</li></ul>
+              <b>检查：所有节点都有明确职责和名称。</b>
+            </article>
+            <article class="week-card reveal">
+              <div class="week-no">W03</div><span>匹配与 Look</span>
+              <h3>让镜头像同一场戏</h3>
+              <ul><li>为 3 个场景选 Hero Shot 并匹配其余镜头</li><li>做自然、冷峻、暖胶片三种 Look 版本</li><li>练习肤色、天空、环境色分离</li></ul>
+              <b>检查：风格不牺牲肤色、信息与连续性。</b>
+            </article>
+            <article class="week-card reveal">
+              <div class="week-no">W04</div><span>完成与交付</span>
+              <h3>把作品变成可交付版本</h3>
+              <ul><li>输出 SDR 与审片版本，核对标签与编码</li><li>完成全片播放 QC 与字幕安全区检查</li><li>整理 Still、节点截图、项目说明和 LUT</li></ul>
+              <b>检查：另一个人能按文档复现你的结果。</b>
+            </article>
+          </div>
+
+          <div class="drill-lab reveal">
+            <div class="drill-head"><div><span class="eyebrow">PRACTICE CHECKLIST</span><h3>30 天刻意练习清单</h3></div><span id="drillCount">0 / 10</span></div>
+            <div class="drill-grid">
+              <label><input type="checkbox" data-drill><span></span><b>01</b>用 RGB Parade 找到中性灰</label>
+              <label><input type="checkbox" data-drill><span></span><b>02</b>在不看节点名的情况下解释一条节点链</label>
+              <label><input type="checkbox" data-drill><span></span><b>03</b>让同一场景两个镜头在剪辑点不跳</label>
+              <label><input type="checkbox" data-drill><span></span><b>04</b>用一个限定器分离肤色并检查 Matte</label>
+              <label><input type="checkbox" data-drill><span></span><b>05</b>用窗口和跟踪建立视线引导</label>
+              <label><input type="checkbox" data-drill><span></span><b>06</b>只用颜色关系，不用大色偏建立风格</label>
+              <label><input type="checkbox" data-drill><span></span><b>07</b>比较 Halation 开与关的叙事效果</label>
+              <label><input type="checkbox" data-drill><span></span><b>08</b>做一版 SDR 与一版 HDR 审片转换</label>
+              <label><input type="checkbox" data-drill><span></span><b>09</b>对一个输出文件做全片 QC</label>
+              <label><input type="checkbox" data-drill><span></span><b>10</b>让另一位调色师复现你的步骤</label>
+            </div>
+          </div>
+
+          <div class="paper-notes reveal">
+            <div class="paper-notes-head"><span class="eyebrow">STUDY SOURCES / 学习资料</span><h3>官方文档打底，实拍项目验证</h3></div>
+            <div class="paper-grid">
+              <article><span>01</span><h4>DaVinci Resolve Training</h4><p>Blackmagic Design 官方培训与手册：界面、节点、色彩管理与交付设置的最佳起点。</p><a href="https://www.blackmagicdesign.com/products/davinciresolve/training" target="_blank" rel="noreferrer">Official Training ↗</a></article>
+              <article><span>02</span><h4>DaVinci Resolve Manual</h4><p>遇到菜单与版本差异时，以对应版本的官方 Reference Manual 为准。</p><a href="https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion" target="_blank" rel="noreferrer">Support ↗</a></article>
+              <article><span>03</span><h4>ACES Documentation</h4><p>深入 IDT、ACEScct、LMT、ODT 与不同显示目标之间的转换逻辑。</p><a href="https://docs.acescentral.com/" target="_blank" rel="noreferrer">ACES Docs ↗</a></article>
+            </div>
+          </div>
+
+          <div class="glossary reveal">
+            <div class="glossary-title"><span class="eyebrow">POCKET GLOSSARY</span><h3>调色口袋词表</h3></div>
+            <dl>
+              <div><dt>Color Management</dt><dd>定义输入、工作、显示和输出色彩空间的转换链路。</dd></div>
+              <div><dt>Working Space</dt><dd>调色运算所在的色彩空间或工作曲线。</dd></div>
+              <div><dt>ODT</dt><dd>输出显示变换，把工作空间映射到具体显示目标。</dd></div>
+              <div><dt>Power Window</dt><dd>控制局部调整空间范围的形状遮罩。</dd></div>
+              <div><dt>Qualifier</dt><dd>按色相、饱和度、亮度等选择颜色相似区域。</dd></div>
+              <div><dt>Layer Mixer</dt><dd>把并行节点或 Alpha 遮罩结果混合的节点。</dd></div>
+              <div><dt>Pivot</dt><dd>对比调整的支点位置，影响亮暗拉伸方式。</dd></div>
+              <div><dt>Halation</dt><dd>高光在影像结构中扩散形成的红橙色光晕。</dd></div>
+              <div><dt>LUT</dt><dd>查找表，能把输入颜色映射到输出颜色；需明确色彩空间和用途。</dd></div>
+              <div><dt>Gamut Mapping</dt><dd>把超出目标色域的颜色映射回可显示范围。</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="chapter" id="debug">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">10</span><span class="eyebrow">TROUBLESHOOT / 调色故障手册</span></div>
+            <span class="time-chip">DIAGNOSE · 先旁路，再定位</span>
+          </div>
+          <div class="two-col-title reveal">
+            <h2>画面不对时，<br>先从信号链找答案。</h2>
+            <div><p class="lead">按色彩管理、源素材、节点、遮罩、跟踪与交付顺序诊断。问题不一定在最后一个工具上，很多“调不准”是输入空间或输出转换错了。</p></div>
+          </div>
+          <div class="debug-table reveal">
+            <div class="debug-row debug-head"><span>症状</span><span>优先怀疑</span><span>最小验证</span><span>处理</span></div>
+            <div class="debug-row"><span>黑色发灰 / 白色不足</span><span>数据范围 / Gamma / LUT</span><span>旁路全部节点，检查源与输出设置</span><span>统一范围与显示变换，避免重复映射</span></div>
+            <div class="debug-row"><span>画面整体发绿</span><span>输入空间 / 白点 / 监视器</span><span>RGB Parade + 中性灰参考</span><span>先修技术链，再用色轮微调</span></div>
+            <div class="debug-row"><span>肤色过黄或发青</span><span>色温 / 限定器 / 色彩空间</span><span>Toggle Matte，比较限定器开关</span><span>收窄选区，保护高光与环境反射</span></div>
+            <div class="debug-row"><span>局部边缘来回跳</span><span>跟踪 / 遮罩 / 羽化</span><span>逐帧看 Matte 与边界</span><span>重新跟踪、修关键帧或更换遮罩工具</span></div>
+            <div class="debug-row"><span>调整后出现色带</span><span>位深 / 饱和度 / 编码</span><span>检查源位深与输出格式</span><span>提高工作精度，控制饱和与输出压缩</span></div>
+            <div class="debug-row"><span>各镜头单独好看但不接</span><span>缺少 Hero 与全局比较</span><span>播放场景并切相邻镜头</span><span>重新统一黑位、白点、肤色与饱和度</span></div>
+            <div class="debug-row"><span>导出比 Viewer 更灰</span><span>输出标签 / 显示转换</span><span>用输出文件回读并比较信息</span><span>检查色彩标签、Gamma 与平台映射</span></div>
+            <div class="debug-row"><span>动画闪烁或滚屏</span><span>时域处理 / 跟踪 / 颗粒</span><span>逐帧与实时播放对比</span><span>减少时域处理，调整遮罩或运动模糊</span></div>
+          </div>
+          <div class="debug-rule reveal"><span>DEBUG RULE</span><p>每次只旁路一个节点，每次只改一个变量。先在 Still 中对比，再放到全片播放中验证；不要用更大的风格掩盖技术错误。</p></div>
+        </section>
+
+        <section class="chapter quiz-section" id="quiz">
+          <div class="chapter-head reveal">
+            <div><span class="chapter-no">QC</span><span class="eyebrow">KNOWLEDGE CHECK / 三题自测</span></div>
+            <span class="time-chip">COLOR CHECK · 3 MIN</span>
+          </div>
+          <div class="quiz-layout">
+            <div class="quiz-intro reveal">
+              <h2>你能分辨<br>“问题”与“风格”吗？</h2>
+              <p>答完立即得到解释。三题分别检查色彩管理、节点诊断和镜头匹配。</p>
+              <div class="quiz-score"><span id="quizScore">0</span><small>/ 3 CORRECT</small></div>
+            </div>
+            <div class="quiz-list">
+              <article class="quiz-card reveal" data-answer="c">
+                <span class="quiz-no">Q1 / COLOR MANAGEMENT</span>
+                <h3>画面整体发灰，第一步最合理的判断是什么？</h3>
+                <div class="quiz-options">
+                  <button type="button" data-choice="a"><i>A</i>直接把饱和度拉满</button>
+                  <button type="button" data-choice="b"><i>B</i>套一个风格 LUT 掩盖</button>
+                  <button type="button" data-choice="c"><i>C</i>检查输入空间、Gamma、数据范围与显示转换</button>
+                </div>
+                <p class="quiz-feedback">“灰”可能来自 Log 尚未正确转换、数据范围不匹配或输出映射问题。先验证信号链，再做审美判断。</p>
+              </article>
+              <article class="quiz-card reveal" data-answer="b">
+                <span class="quiz-no">Q2 / NODES</span>
+                <h3>某个局部节点把边缘也改变了，最有效的第一步是什么？</h3>
+                <div class="quiz-options">
+                  <button type="button" data-choice="a"><i>A</i>继续增加整体饱和度</button>
+                  <button type="button" data-choice="b"><i>B</i>Toggle Matte，检查抠像范围、羽化与跟踪</button>
+                  <button type="button" data-choice="c"><i>C</i>在后端叠加更多风格节点</button>
+                </div>
+                <p class="quiz-feedback">出现边缘问题先验证选区本身。Matte 范围过大、羽化不合适或跟踪漂移，都会让局部调整扩散到不该影响的位置。</p>
+              </article>
+              <article class="quiz-card reveal" data-answer="a">
+                <span class="quiz-no">Q3 / SHOT MATCH</span>
+                <h3>一场戏中每个镜头单独看都漂亮，但剪辑点会跳。正确做法是？</h3>
+                <div class="quiz-options">
+                  <button type="button" data-choice="a"><i>A</i>选 Hero Shot，连续播放并统一黑位、高光、白点与肤色关系</button>
+                  <button type="button" data-choice="b"><i>B</i>给每个镜头套不同风格，让差异更明显</button>
+                  <button type="button" data-choice="c"><i>C</i>只看 Still，不播放连续镜头</button>
+                </div>
+                <p class="quiz-feedback">镜头匹配是关系工作。Hero Shot 提供基准，连续播放暴露明暗、色温和肤色跳变；每一镜单独“好看”并不等于场景成立。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="closing reveal">
+          <span class="eyebrow">ONE FRAME AT A TIME</span>
+          <h2>你调的不是颜色，<br>是观众<em>看向哪里。</em></h2>
+          <p>先理解信号，再建立关系，最后才加入风格。每一次调整都能解释，每一个结果都能复现。</p>
+          <div class="closing-actions">
+            <a class="button button-primary" href="#top">回到顶部 ↑</a>
+            <button class="button button-ghost" id="printButtonBottom" type="button">导出 PDF</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div><span class="brand-mark small">C<span>/</span>A</span><p>Color Atlas<br>达芬奇调色深度学习手册 · 2026.10</p></div>
+    <p class="footer-note">离线可用 · 不依赖外部字体与资源<br>快捷键：按 <kbd>P</kbd> 打印，按 <kbd>Esc</kbd> 关闭菜单</p>
+    <a href="#top">BACK TO TOP ↑</a>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">已复制</div>
+  <script src="script.js"></script>
+</body>
+</html>
